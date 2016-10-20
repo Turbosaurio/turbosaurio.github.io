@@ -129,7 +129,7 @@ function instanceColor(val,color){
 				return true;
 			}break;
 		case 'street':
-			if(val>466 && val<480){
+			if(val>540 && val<581 || val==601 || val==602){
 				return true;
 			}break;
 		default: break;
@@ -140,7 +140,7 @@ function getColor(val){
 	if(val==146 || val>147 && val<241) return 'red';
 	if(val==445 || val==446) return 'green';
 	if(val==290 || val>199 && val<361) return 'blue';
-	if(val>466 && val<480) return 'street';
+	if(val>540 && val<581 || val==601 || val==602) return 'street';
 }
 function createSelectors(f,leng,color){
 	$('#selection *').remove();
@@ -257,10 +257,10 @@ function startFloor(f,typ){
 };
 
 function startPlayer(f,color){
-	var	arr=eval('floor_'+f),
-		player=rotatePlayerPos(posA,current_dir,arr.length);
+	var	arr=eval('floor_'+f);
+	posA=rotatePlayerPos(posA,current_dir,arr.length);
 	createSelectors(f,eval('floor_'+f).length,color);
-	showPlayer(player,f);
+	showPlayer(posA,f);
 	clickTile(f);
 };
 var	current_floor=2,
@@ -279,10 +279,10 @@ $(document).ready(function(){
 	
 	startFloor(0,current_dir);
 	startFloor(1,current_dir);
-	//startFloor(2,current_dir);
+	startFloor(2,current_dir);
 	//startFloor(3,current_dir);
-	rotateFloorButton(1);
-	startPlayer(1,"yellow");
+	rotateFloorButton(2);
+	startPlayer(2,"yellow");
 });
 
 function rotateFloorButton(f){
@@ -312,7 +312,8 @@ function rotateFloorButton(f){
 			flipClass(rotateLevel(eval('floor_'+r),to_cam),r,to_cam);
 		}
 		startFloor(f,to_cam);
-		startPlayer(f,'yellow');
+		var coeur=getColor(eval('floor_'+f)[posA.y][posA.x]);
+		startPlayer(f, coeur);
 		flipClass(rotateLevel(eval('floor_'+f),to_cam),f,to_cam);
 		current_dir=to_cam;
 		console.log(posA);

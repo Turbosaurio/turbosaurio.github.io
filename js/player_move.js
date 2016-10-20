@@ -167,8 +167,8 @@ function processToMove(route,floor){
 
 		$('.tileSelec').show();
 		$('#selec'+floor+"_"+posA.y+"_"+posA.x).hide();
-		hideCurrentWall(floor,posA,'one');
-		//mapButtons(floor,posA);
+		//hideCurrentWall(floor,posA,'one');
+		mapButtons(floor,posA);
 		var pep=setTimeout(function(){playerFace(face,"c")},animPlayTime);
 	};
 };
@@ -176,7 +176,7 @@ function processToMove(route,floor){
 
 function actionValidate(val){
 	var actions=[
-		97,125, ////sube yellow
+		61,82, ////sube yellow
 		241,269,////sube red
 		102,126,/////baja yellow
 		246,270,/////baja red
@@ -184,8 +184,8 @@ function actionValidate(val){
 		259,260,///esc sube red
 		117,118,//esc baja yell
 		261,262,////esc baja red
-		17,20,21,24,//door yellow
-		161,164,165,168, ///door red
+		41,43,48,46,//door yellow
+		221,223,228,226, ///door red
 		482,487/////elevator
 
 		];
@@ -215,8 +215,8 @@ function mapButtons(f,pos){
 				obj;
 			if(actionValidate(tileVal)){
 				/////subir
-				if(tileVal==97)				obj={id:"a", t:"u", c:"y"};
-				if(tileVal==125)				obj={id:"b", t:"u", c:"y"};
+				if(tileVal==61)				obj={id:"a", t:"u", c:"y"};
+				if(tileVal==82)				obj={id:"b", t:"u", c:"y"};
 				if(tileVal==241)				obj={id:"a", t:"u", c:"r"};
 				if(tileVal==269)				obj={id:"b", t:"u", c:"r"};
 				/////bajar
@@ -225,10 +225,10 @@ function mapButtons(f,pos){
 				if(tileVal==246) 				obj={id:"a", t:"d", c:"r"};
 				if(tileVal==270) 				obj={id:"b", t:"d", c:"r"};
 				/////door
-				if(tileVal==20 || tileVal==164)	obj={id:"a", t:"door", c:'n'};
-				if(tileVal==161 || tileVal==17)	obj={id:"b", t:"door", c:'n'};	
-				if(tileVal==21 || tileVal==165)	obj={id:"c", t:"door", c:'n'};
-				if(tileVal==168 || tileVal==24)	obj={id:"d", t:"door", c:'n'};
+				if(tileVal==43 || tileVal==223)	obj={id:"a", t:"door", c:'n'};
+				if(tileVal==221 || tileVal==41)	obj={id:"b", t:"door", c:'n'};	
+				if(tileVal==48 || tileVal==228)	obj={id:"c", t:"door", c:'n'};
+				if(tileVal==226 || tileVal==46)	obj={id:"d", t:"door", c:'n'};
 
 				if(tileVal==482 || tileVal==487)	obj={id:"a",t: "e", c:'n'};
 				createMapButton(obj,coord,f);
