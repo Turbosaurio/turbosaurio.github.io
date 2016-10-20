@@ -9,7 +9,6 @@ function showPlayer(pos,floor){
 		'z-index': til.css('z-index')
 	});
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
-	console.log('show P');
 };
 function showNPC(pos,floor){
 	$('.almond').remove();
@@ -168,7 +167,7 @@ function processToMove(route,floor){
 
 		$('.tileSelec').show();
 		$('#selec'+floor+"_"+posA.y+"_"+posA.x).hide();
-		//hideCurrentWall(floor,posA,'one');
+		hideCurrentWall(floor,posA,'one');
 		//mapButtons(floor,posA);
 		var pep=setTimeout(function(){playerFace(face,"c")},animPlayTime);
 	};

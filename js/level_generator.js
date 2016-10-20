@@ -85,8 +85,7 @@ function rotatePlayerPos(pos,dir,len){
 			}
 		}
 	}
-	console.log(dir+": y: "+y+", x: "+x);
-	posA={y,x};
+	return {y,x};
 }
 
 function createLevel(arr,tar,clase,height,width,tileName,f,typ){
@@ -195,7 +194,7 @@ function hideCurrentWall(floor,coord,mode){
 					var	lol=f[y][x],
 						tile=$('#tile'+floor+"_"+y+"_"+x);
 					if(	////walls
-						lol>27 && lol<37 || lol>42 && lol<49 ||////////yellow
+						lol>12 && lol<37 && lol%4==3 || lol%4==0 ||////////yellow
 						lol>171 && lol<181 || lol>186 && lol<193///////red
 						){
 						console.log(tile);
@@ -203,10 +202,10 @@ function hideCurrentWall(floor,coord,mode){
 					}
 					if(
 						///doors
-						lol>18 && lol<25 || ///yellow
-						lol>162 && lol<169 ////red
+						lol>40 && lol<49 || ///yellow
+						lol>220 && lol<229 ////red
 						){
-						tile.attr({class: 'txt'+(parseInt(tile.attr('level'))+72)});
+						tile.attr({class: 'txt'+(parseInt(tile.attr('level'))+8)});
 					}
 				}
 			}
@@ -216,17 +215,17 @@ function hideCurrentWall(floor,coord,mode){
 				tile=$('#tile'+floor+"_"+coord.y+"_"+coord.x);
 			if(
 				////walls
-				lol>27 && lol<37 || lol>54 && lol<61 ||////////yellow
+				lol>12 && lol<37 && lol%4==3 || lol%4==0 ||////////yellow
 				lol>171 && lol<181 || lol>198 && lol<204///////red
 				){
-				tile.attr({class: 'txt'+(parseInt(tile.attr('level'))+12)});
+				tile.attr({class: 'txt2'});
 				//tile.css({opacity:.75});
 			}if(
 				///doors
-				lol>16 && lol<25 || ///yellow
-				lol>160 && lol<169 ////red
+				lol>40 && lol<49 || ///yellow
+				lol>220 && lol<229 ////red
 				){
-				tile.attr({class: 'txt'+(parseInt(tile.attr('level'))+72)});
+				tile.attr({class: 'txt'+(parseInt(tile.attr('level'))+8)});
 			}
 			break;
 		default: break;
@@ -247,26 +246,23 @@ for(var ch=0;ch<=9;ch++){
 var	t_w=34,
 	t_h=74;
 
-function startFloor(f,color,typ){
+function startFloor(f,typ){
 	var arr=eval('floor_'+f);
 	$('#piso'+f+' *').remove();
 	createLevel(arr,'piso'+f,"txt",t_w,t_h,'tile',f,typ);
-	createSelectors(f,eval('floor_'+f).length,color);
-	//posA.y=rotatePlayerPos(posA,typ,arr.length).y;
-	rotatePlayerPos(posA,typ,arr.length);
-	showPlayer(posA,f);
 	/*$('html, body').animate({
 		scrollTop: $('#jugador01').offset().top-200,
 		scrollLeft: $('#jugador01').offset().left-300
 	},animPlayTime);*/
+};
+
+function startPlayer(f,color){
+	var	arr=eval('floor_'+f),
+		player=rotatePlayerPos(posA,current_dir,arr.length);
+	createSelectors(f,eval('floor_'+f).length,color);
+	showPlayer(player,f);
 	clickTile(f);
 };
-function createFloor(f,typ){
-	var arr=rotateLevel(eval('floor_'+f),typ);
-	$('#piso'+f+" *").remove();
-	createLevel(arr,'piso'+f,"txt",t_w,t_h,'tile',f,typ);
-}
-
 var	current_floor=2,
 	current_dir="ori";
 
@@ -280,16 +276,13 @@ $(document).ready(function(){
 		
 	}
 	$('body').append('<div id="selection"/>');
-	//createLevel(eval('floor_'+3),'piso'+3,"txt",t_w,t_h,'tile',3,"ori");
-	//createLevel(eval('floor_'+1),'piso'+1,"txt",t_w,t_h,'tile',1);
-	createFloor(0,current_dir);
-	createFloor(1,current_dir);
-	createFloor(2,current_dir);
-	startFloor(3,'yellow',current_dir);
-	rotateFloorButton(3);
-	//showNPC(npcA,3);
-	//var w=-150, h=-300;
-	//$('#jugador01').css({"background-position" : 5*w+"px"+" "+3*h+"px"});
+	
+	startFloor(0,current_dir);
+	startFloor(1,current_dir);
+	//startFloor(2,current_dir);
+	//startFloor(3,current_dir);
+	rotateFloorButton(1);
+	startPlayer(1,"yellow");
 });
 
 function rotateFloorButton(f){
@@ -314,10 +307,12 @@ function rotateFloorButton(f){
 		$('#piso'+f+' *').remove();
 		//rotatePlayerPos(posA, to_cam, eval('floor_'+f).length);
 		for(var r=0;r<f;r++){
-			flipClass(rotateLevel(eval('floor_'+r),to_cam),f,to_cam);
-			createFloor(r,to_cam);
+			//createFloor(r,to_cam);
+			startFloor(r,to_cam);
+			flipClass(rotateLevel(eval('floor_'+r),to_cam),r,to_cam);
 		}
-		startFloor(f,'yellow',to_cam);
+		startFloor(f,to_cam);
+		startPlayer(f,'yellow');
 		flipClass(rotateLevel(eval('floor_'+f),to_cam),f,to_cam);
 		current_dir=to_cam;
 		console.log(posA);
@@ -327,7 +322,7 @@ function flipClass(arr,f,typ){
 	for(var g=0; g<arr.length; g++){
 		for(var i=0;i<arr[0].length; i++){
 			var t=arr[g][i];
-			if(t>4 && t<165 || t>185 && t<321 || t>360 && t<425){////yellow
+			if(t>4 && t<165 || t>185 && t<321 || t>360 && t<425 || t>540 && t<581){////yellow
 				var p;
 				switch(typ){
 					case "rot":
