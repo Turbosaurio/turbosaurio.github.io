@@ -70,22 +70,21 @@ function rotateLevel(arr, dir){
 	return a;
 }
 
-function rotatePlayerPos(pos,dir,len){
-	var a=[], y, x;
-	for(var h=0; h<len; h++){
-		a[h]=addEmptyArr(len);
+function rotatePlayerPos(dir,pos,len){
+	var a=[];
+	for(var u=0; u<len; u++){
+		a[u]=addEmptyArr(len);
 	}
-	a[pos.y][pos.x]=1;
+	a[pos.y][pos.x]="pp";
 	var lel=rotateLevel(a,dir);
-	for(var h=0; h<len; h++){
-		for(var n=0; n<len; n++){
-			if(lel[h][n]==1){
-				y=h,x=n;
-				break;
+	for(var y=0; y<len; y++){
+		for(var x=0; x<len; x++){
+			if(lel[y][x]=="pp"){
+				//console.log({y,x});
+				return {y,x};
 			}
 		}
 	}
-	return {y,x};
 }
 
 function createLevel(arr,tar,clase,height,width,tileName,f,typ){
@@ -256,11 +255,11 @@ function startFloor(f,typ){
 	},animPlayTime);*/
 };
 
-function startPlayer(f,color){
+function startPlayer(f,pos,color){
 	var	arr=eval('floor_'+f);
-	posA=rotatePlayerPos(posA,current_dir,arr.length);
+	//posA=rotatePlayerPos(posA,current_dir,arr.length);
 	createSelectors(f,eval('floor_'+f).length,color);
-	showPlayer(posA,f);
+	showPlayer(pos,f);
 	clickTile(f);
 };
 var	current_floor=2,
@@ -277,12 +276,12 @@ $(document).ready(function(){
 	}
 	$('body').append('<div id="selection"/>');
 	
-	startFloor(0,current_dir);
+	//startFloor(0,current_dir);
 	startFloor(1,current_dir);
 	startFloor(2,current_dir);
 	//startFloor(3,current_dir);
 	rotateFloorButton(2);
-	startPlayer(2,"yellow");
+	startPlayer(2,posA,"street");
 });
 
 function rotateFloorButton(f){
@@ -312,11 +311,12 @@ function rotateFloorButton(f){
 			flipClass(rotateLevel(eval('floor_'+r),to_cam),r,to_cam);
 		}
 		startFloor(f,to_cam);
+		var newPos=rotatePlayerPos(to_cam,posA,eval('floor_'+f).length);
+		console.log(newPos);
 		var coeur=getColor(eval('floor_'+f)[posA.y][posA.x]);
-		startPlayer(f, coeur);
 		flipClass(rotateLevel(eval('floor_'+f),to_cam),f,to_cam);
+		startPlayer(f, newPos, coeur);
 		current_dir=to_cam;
-		console.log(posA);
 	});
 }
 function flipClass(arr,f,typ){

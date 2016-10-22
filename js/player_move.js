@@ -22,7 +22,7 @@ function showNPC(pos,floor){
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
 };
 
-var 	posA={y:6,x:14},
+var 	posA={y:18,x:18},
 	posB={y:"",x:""};
 var 	npcA={y:7, x:12};
 
@@ -30,11 +30,12 @@ function clickTile(floor){
 	$('.tileSelec').click(function(){
 		$('.tileSelec').hide();
 		$('.mapObj').remove();
-		restoreWall(floor,posA);
 		posB={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
-		var color=getColor(eval('floor_'+floor)[posA.y][posA.x]);
 
-		var	player_route=starRoute(rotateLevel(eval('floor_'+floor),current_dir),posA,posB,color);
+		var	arr=rotateLevel(eval('floor_'+floor),current_dir),
+			pos=rotatePlayerPos(current_dir,posA,eval('floor_'+floor).length),
+			color=getColor(eval('floor_'+floor)[posA.y][posA.x]),
+			player_route=starRoute(arr, posA, posB, color);
 		//var	player_route=starRoute(rotateLevel(floor_2,"rot"),posA,posB,color);
 		//console.log(getDepths(player_route,floor));
 		animatePlayer=setInterval(function(){
@@ -306,7 +307,8 @@ function createMapButton(o,c,f){
 					cos++;
 					if(cos>6){
 						clearInterval(animatePlayer);
-						startFloor(c.f+1,color);
+						startFloor(c.f+1,current_dir);
+						startPlayer(f+1,color);
 					}
 					
 				},animPlayTime);
