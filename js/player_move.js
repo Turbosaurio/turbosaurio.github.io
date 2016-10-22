@@ -22,7 +22,7 @@ function showNPC(pos,floor){
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
 };
 
-var 	posA={y:18,x:18},
+var 	posA={y:6,x:12},
 	posB={y:"",x:""};
 var 	npcA={y:7, x:12};
 
@@ -32,10 +32,11 @@ function clickTile(floor){
 		$('.mapObj').remove();
 		posB={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
 
-		var	arr=rotateLevel(eval('floor_'+floor),current_dir),
+		var	//arr=rotateLevel(eval('floor_'+floor),current_dir),
+			arr=eval('floor_'+floor),
 			pos=rotatePlayerPos(current_dir,posA,eval('floor_'+floor).length),
 			color=getColor(eval('floor_'+floor)[posA.y][posA.x]),
-			player_route=starRoute(arr, posA, posB, color);
+			player_route=starRoute(arr, pos, posB, color);
 		//var	player_route=starRoute(rotateLevel(floor_2,"rot"),posA,posB,color);
 		//console.log(getDepths(player_route,floor));
 		animatePlayer=setInterval(function(){

@@ -131,6 +131,10 @@ function instanceColor(val,color){
 			if(val>540 && val<581 || val==601 || val==602){
 				return true;
 			}break;
+		case 'storage':
+			if(val>640 && val<661 || val >684 && val<701 || val==718){
+				return true;
+			}break;
 		default: break;
 	}
 }
@@ -140,6 +144,7 @@ function getColor(val){
 	if(val==445 || val==446) return 'green';
 	if(val==290 || val>199 && val<361) return 'blue';
 	if(val>540 && val<581 || val==601 || val==602) return 'street';
+	if(val>640 && val<661 || val >684 && val<701 || val==718) return 'storage';
 }
 function createSelectors(f,leng,color){
 	$('#selection *').remove();
@@ -277,11 +282,11 @@ $(document).ready(function(){
 	$('body').append('<div id="selection"/>');
 	
 	//startFloor(0,current_dir);
-	startFloor(1,current_dir);
-	startFloor(2,current_dir);
+	startFloor(0,current_dir);
+	//startFloor(1,current_dir);
 	//startFloor(3,current_dir);
-	rotateFloorButton(2);
-	startPlayer(2,posA,"street");
+	rotateFloorButton(0);
+	startPlayer(0,posA,'storage');
 });
 
 function rotateFloorButton(f){
@@ -323,7 +328,7 @@ function flipClass(arr,f,typ){
 	for(var g=0; g<arr.length; g++){
 		for(var i=0;i<arr[0].length; i++){
 			var t=arr[g][i];
-			if(t>4 && t<165 || t>185 && t<321 || t>360 && t<425 || t>540 && t<581){////yellow
+			if(t>4 && t<165 || t>185 && t<321 || t>360 && t<425 || t>540 && t<581 || t>640 && t<717){////yellow
 				var p;
 				switch(typ){
 					case "rot":
