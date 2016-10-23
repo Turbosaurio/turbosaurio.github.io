@@ -281,12 +281,14 @@ $(document).ready(function(){
 	}
 	$('body').append('<div id="selection"/>');
 	
-	//startFloor(0,current_dir);
-	startFloor(0,current_dir);
+	startFloor(2,current_dir);
+	//startFloor(1,current_dir);
+	//startFloor(2,current_dir);
+	//startFloor(2,current_dir);
 	//startFloor(1,current_dir);
 	//startFloor(3,current_dir);
-	rotateFloorButton(0);
-	startPlayer(0,posA,'storage');
+	rotateFloorButton(2);
+	startPlayer(2,posA,'yellow');
 });
 
 function rotateFloorButton(f){

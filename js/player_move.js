@@ -309,7 +309,8 @@ function createMapButton(o,c,f){
 					if(cos>6){
 						clearInterval(animatePlayer);
 						startFloor(c.f+1,current_dir);
-						startPlayer(f+1,color);
+						startPlayer(f+1,posA,color);
+						rotateFloorButton(f+1);
 					}
 					
 				},animPlayTime);
@@ -319,10 +320,11 @@ function createMapButton(o,c,f){
 				o.id=="a" ? v=6 : s=6;
 				/*posA.y=parseInt($(this).attr('y'))+v;
 				posA.x=parseInt($(this).attr('x'))+s;*/
-				posA.y+=v;
-				posA.x+=s;
-				startFloor(c.f-1,color);
-				$('#jugador01').css({"background-position" : 5*w+px+" "+3*h+px});
+				posA.y+=s;
+				posA.x+=v;
+				startFloor(c.f-1,current_dir);
+				startPlayer(f-1,posA,color);
+				rotateFloorButton(f-1);
 				break;
 			case 'door':
 				var corA,corB;
