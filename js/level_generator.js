@@ -154,16 +154,50 @@ function createSelectors(f,leng,color){
 			var	sap=$('#tile'+f+'_'+j+"_"+k),
 				name='selec'+f+'_'+j+"_"+k,
 				kak=sap.attr('level');
-				if(instanceColor(kak,color)){
-					selection.append('<div class="tileSelec" id="'+name+'" ypos="'+j+'" xpos="'+k+'"/>');
-					$('#selec'+f+"_"+posA.y+"_"+posA.x).hide();
-					$('#'+name).css({
-						top: sap.offset().top+226+"px",
-						left: sap.offset().left+35+"px"
-					});
-				};				
+			if(instanceColor(kak,color)){
+				selection.append('<div class="tileSelec" id="'+name+'" ypos="'+j+'" xpos="'+k+'"/>');
+				$('#selec'+f+"_"+posA.y+"_"+posA.x).hide();
+				$('#'+name).css({
+					top: sap.offset().top+226+"px",
+					left: sap.offset().left+35+"px"
+				});
+			};				
 		};
 	};
+	/*for(var h=0, j=leng-1; h<leng, j>=0; h++, j--){
+		for(var n=0, m=leng-1; n<leng, m>=0; n++, m--){
+			var	y, x;
+			switch(current_dir){
+				case 'ori':
+					y=h;
+					x=n;
+					break;
+				case "rot":
+					y=m;
+					x=h;
+					break;
+				case "rev":
+					y=n;
+					x=j;
+					break;
+				case "inv":
+					y=j;
+					x=m;
+					break;
+				default: break;
+			}
+			var	sap=$('#tile'+f+'_'+y+"_"+x),
+				name='selec'+f+'_'+y+"_"+x;
+			if(instanceColor(sap.attr('level'),color)){
+				selection.append('<div class="tileSelec" id="'+name+'" ypos="'+y+'" xpos="'+x+'">'+current_dir+","+y+","+x+'</div>');
+				$('#selec'+f+"_"+posA.y+"_"+posA.x).hide();
+				$('#'+name).css({
+					top: sap.offset().top+226+"px",
+					left: sap.offset().left+35+"px"
+				});
+			};				
+		}
+	}*/
 };
 
 
@@ -267,7 +301,7 @@ function startPlayer(f,pos,color){
 	showPlayer(pos,f);
 	clickTile(f);
 };
-var	current_floor=2,
+var	current_floor=0,
 	current_dir="ori";
 
 $(document).ready(function(){
@@ -280,15 +314,12 @@ $(document).ready(function(){
 		
 	}
 	$('body').append('<div id="selection"/>');
-	
-	startFloor(2,current_dir);
-	//startFloor(1,current_dir);
-	//startFloor(2,current_dir);
-	//startFloor(2,current_dir);
-	//startFloor(1,current_dir);
-	//startFloor(3,current_dir);
-	rotateFloorButton(2);
-	startPlayer(2,posA,'yellow');
+	for(var kok=0; kok<current_floor; kok++){
+		startFloor(kok,current_dir);
+	}
+	startFloor(current_floor,current_dir);
+	rotateFloorButton(current_floor);
+	startPlayer(2,posA,getColor(eval('floor_'+2)[posA.y][posA.x]));
 });
 
 function rotateFloorButton(f){
@@ -319,18 +350,23 @@ function rotateFloorButton(f){
 		}
 		startFloor(f,to_cam);
 		var newPos=rotatePlayerPos(to_cam,posA,eval('floor_'+f).length);
-		console.log(newPos);
+		//console.log(newPos);
 		var coeur=getColor(eval('floor_'+f)[posA.y][posA.x]);
 		flipClass(rotateLevel(eval('floor_'+f),to_cam),f,to_cam);
-		startPlayer(f, newPos, coeur);
 		current_dir=to_cam;
+		startPlayer(f, newPos, coeur);
+		console.log(current_dir);
 	});
 }
 function flipClass(arr,f,typ){
 	for(var g=0; g<arr.length; g++){
 		for(var i=0;i<arr[0].length; i++){
 			var t=arr[g][i];
-			if(t>4 && t<165 || t>185 && t<321 || t>360 && t<425 || t>540 && t<581 || t>640 && t<717){////yellow
+			if(
+			t>4 && t<165 || t>185 && t<321 || t>360 && t<425 || 
+			t>540 && t<581 || t>640 && t<717 ||
+			t>724 && t<797 || t>824 && t<885
+			){////yellow
 				var p;
 				switch(typ){
 					case "rot":

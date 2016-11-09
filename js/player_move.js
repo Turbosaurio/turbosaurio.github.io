@@ -22,7 +22,7 @@ function showNPC(pos,floor){
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
 };
 
-var 	posA={y:6,x:12},
+var 	posA={y:17,x:17},
 	posB={y:"",x:""};
 var 	npcA={y:7, x:12};
 
@@ -31,16 +31,19 @@ function clickTile(floor){
 		$('.tileSelec').hide();
 		$('.mapObj').remove();
 		posB={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
-
-		var	//arr=rotateLevel(eval('floor_'+floor),current_dir),
-			arr=eval('floor_'+floor),
-			pos=rotatePlayerPos(current_dir,posA,eval('floor_'+floor).length),
-			color=getColor(eval('floor_'+floor)[posA.y][posA.x]),
-			player_route=starRoute(arr, pos, posB, color);
+		var	//arr=eval('floor_'+floor),
+			arr=rotateLevel(eval('floor_'+floor),current_dir),
+			pos=rotatePlayerPos(current_dir,posA,arr.length),
+			pos_b=rotatePlayerPos(current_dir,posB,arr.length),
+			color=getColor(arr[pos.y][pos.x]);
+		console.log(pos);
+		console.log(pos_b);
+		console.log(current_dir);
 		//var	player_route=starRoute(rotateLevel(floor_2,"rot"),posA,posB,color);
 		//console.log(getDepths(player_route,floor));
+		
 		animatePlayer=setInterval(function(){
-			processToMove(player_route,floor);
+			processToMove(starRoute(arr, pos, posB, color),floor);
 		},animPlayTime);
 	});
 };
@@ -147,7 +150,6 @@ function processToMove(route,floor){
 			break;
 		}
 	}
-	var w=-150, h=-300;
 	if(ptm%2==0)	playerFace(face,"a");
 	if(ptm%2!=0)	playerFace(face,"b")
 	ptm++;
@@ -164,7 +166,6 @@ function processToMove(route,floor){
 		posA.y=posB.y;
 		posA.x=posB.x;
 		posB.y="";
-		//playerFace(face,"c");
 		posB.x="";	
 
 		$('.tileSelec').show();
