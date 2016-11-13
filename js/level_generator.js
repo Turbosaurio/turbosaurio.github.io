@@ -301,7 +301,7 @@ function startPlayer(f,pos,color){
 	showPlayer(pos,f);
 	clickTile(f);
 };
-var	current_floor=0,
+var	current_floor=1,
 	current_dir="ori";
 
 $(document).ready(function(){
@@ -319,7 +319,7 @@ $(document).ready(function(){
 	}
 	startFloor(current_floor,current_dir);
 	rotateFloorButton(current_floor);
-	startPlayer(2,posA,getColor(eval('floor_'+2)[posA.y][posA.x]));
+	startPlayer(current_floor,posA,getColor(eval('floor_'+2)[posA.y][posA.x]));
 });
 
 function rotateFloorButton(f){

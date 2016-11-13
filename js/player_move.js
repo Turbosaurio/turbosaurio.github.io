@@ -22,7 +22,7 @@ function showNPC(pos,floor){
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
 };
 
-var 	posA={y:17,x:17},
+var 	posA={y:5,x:5},
 	posB={y:"",x:""};
 var 	npcA={y:7, x:12};
 
@@ -125,18 +125,13 @@ function processToMove(route,floor){
 		mik={y: parseInt(mt.position().top),x: parseInt(mt.position().left)},
 		px="px",
 		dep=parseInt(mt.css('z-index'));
-	//console.log(getDepths(route,floor));
-	//console.log($('#tile'+floor+"_"+posA.y+"_"+posA.x).css('z-index'));
-	//console.log(route.length);
-	//console.log(getDepths(route,floor));
-	//$('#jugador01').css({'z-index':dep+1});
+
 	var lal=getDepths(route,floor);
 	$('#jugador01').css({'z-index': lal[ptm]});	
 	
 	$('#jugador01').animate({
 		top: mik.y+px,
 		left: mik.x+px,
-
 		scrollTop: $('#jugador01').offset().top-200,
 		scrollLeft: $('#jugador01').offset().left-400
 	},animPlayTime);
