@@ -96,6 +96,9 @@ function createLevel(arr,tar,clase,height,width,tileName,f,typ){
 			var	y=kak[h][p][0],
 				x=kak[h][p][1],
 				tile=kek[y][x];
+			if(tile>12 && tile<37 || tile>192 && tile<217){
+				tile+=24;
+			}
 
 			$('#'+tar).append('<tile id="'+tileName+f+"_"+y+"_"+x+'" class="'+clase+tile+'" level="'+tile+'" fpos="'+1+'" ypos="'+y+'" xpos="'+x+'"/>');			
 			$('#'+tileName+f+"_"+y+"_"+x).css({
@@ -107,6 +110,9 @@ function createLevel(arr,tar,clase,height,width,tileName,f,typ){
 		}
 	}
 	pisos[f]="open";
+}
+function enterInstance(color){
+	
 }
 function instanceColor(val,color){
 	switch(color){
@@ -301,7 +307,7 @@ function startPlayer(f,pos,color){
 	showPlayer(pos,f);
 	clickTile(f);
 };
-var	current_floor=1,
+var	current_floor=2,
 	current_dir="ori";
 
 $(document).ready(function(){
@@ -363,7 +369,7 @@ function flipClass(arr,f,typ){
 		for(var i=0;i<arr[0].length; i++){
 			var t=arr[g][i];
 			if(
-			t>4 && t<165 || t>185 && t<321 || t>360 && t<425 || 
+			t>4 && t<177 || t>185 && t<353 || t>360 && t<425 || 
 			t>540 && t<581 || t>640 && t<717 ||
 			t>724 && t<797 || t>824 && t<885
 			){////yellow

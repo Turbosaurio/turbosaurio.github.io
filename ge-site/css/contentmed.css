@@ -1,0 +1,72 @@
+body{
+	background: white;
+}
+#content{
+	font-family: Verdana;
+	color: #CCCCCC;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+}
+
+.imgTop{
+	width:100%;
+}
+.contentArt{
+	background: rgb(50,50,50);
+	margin: 0px 0px 5px -240px;
+	padding: 20px 0px 20px 480px;
+
+}
+.contentArt:last-child{
+	margin-bottom: 50px;
+	border: none;
+}
+#content h1{
+	font-size: 26px;
+}
+#content p,
+#content li{
+	width:70%;
+	font-size: 14px;
+	list-style: inside;
+}
+.contentArt div{
+	margin-left: 25px;
+}
+.widImg{
+	width: 70%;
+	border:1px solid rgb(230,230,230);
+	border-radius: 10px;
+	margin-bottom: 10px;
+}
+.contentImg{
+	float: right;
+	margin-right:0px;
+	border-radius: 5px;
+}
+.tableContent{
+	font-size: 11px;
+	border-collapse: collapse;
+	border-bottom: 5px solid #ccc;
+	margin-bottom: 15px;
+	width:70%;
+}
+.tableContent td:first-child{
+	text-align: right;
+	padding-right: 15px;
+}
+.tableContent td{
+	padding: 2px 0px;
+	border-bottom: 1px solid rgb(200,200,200);
+}
+
+#firma{
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	border-radius: 0px 5px 0px 0px;
+}

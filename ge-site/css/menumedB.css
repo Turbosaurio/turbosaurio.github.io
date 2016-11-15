@@ -1,0 +1,52 @@
+#menu{
+	z-index: 1;
+	position:absolute;
+	top:0px;
+	left: 0px;
+	background: #C2B59B;
+	width:100%;
+	height: 60px;
+}
+.smallDisplay{
+	display: none;
+}
+.largeDisplay{
+	display: none;
+}
+#medMenu img{
+	height: 52px;
+}
+#burg{
+	display:none;
+}
+
+.eleMenu{
+	width:100%;
+	font-size: 1.4em;
+	text-align: center;
+	border-bottom: 1px solid rgb(50,50,50);
+	display: none;
+}
+#logo{
+	display:none;
+}
+.dropDownUL{
+	display:none;
+	margin:0px;
+}
+.listMenu{
+	font-size: 1em;
+	background: rgb(50,50,50);
+	color: #C2B59B;
+	margin-left: -40px;
+	height: 45px;
+	text-align: center;
+	border-bottom: 1px solid #C2B59B;
+	line-height: 50px;
+}
+#close{
+	display:block;
+	position:absolute;
+	right: 0px;
+	bottom: 0px;
+}

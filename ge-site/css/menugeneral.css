@@ -1,0 +1,38 @@
+@font-face{
+	font-family:menu_font;
+	src: url('../fonts/ArnoPro-Display.otf') format('opentype');
+}
+#logo,
+#menuList,
+#franja,
+#socialBottom,
+#inS{
+	background: #C2B59B;
+}
+#menu{
+	font-family: menu_font, Times, serif;
+}
+#menu a{
+	color: rgb(50,50,50);
+}
+
+#logo{
+	border-bottom: 2px solid rgb(60,60,60);
+}
+#menuList{
+	border-top: 2px solid rgb(50,50,50);
+	color:rgb(50,50,50);
+	text-decoration: none;
+	list-style: none;
+}
+
+.listMenu{
+	text-decoration: none;
+}
+.dropDownUL{display: none;}
+
+.ico{
+	float: left;
+	margin:0px 5px 0px 0px;
+	padding: 0px;
+}

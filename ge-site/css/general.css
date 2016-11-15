@@ -1,0 +1,70 @@
+a{
+	text-decoration: none;
+}
+
+#content a,
+#content a:visited{
+	color:white;
+}
+.eleMenu,
+.listMenu{
+	list-style: none;
+	cursor: pointer;
+}
+
+img{
+	border:none;
+}
+.mail{
+	font-weight: bold;
+	text-decoration: underline;
+}
+#content h1{
+	color: #C2B59B;
+	letter-spacing: -.5px;
+}
+#content .quote{
+	font-style: italic;
+	text-align: right;
+	color: #b2b2b2;
+}
+#content .emph{
+	font-size: 18px;
+	text-align: center;
+	font-weight: bold;
+	font-style: italic;
+	font-family:serif;
+	background:rgb(25,25,25);
+	color: rgb(200,200,200);
+}
+.autor a{
+	color: rgb(200,200,200);
+	text-decoration: underline;
+}
+
+
+.foto{
+	border:1px solid white;
+}
+.eng{
+	color:#C2B59B;
+	text-align: right;
+	font-family: eng_font, serif;
+}
+#content h1::before{
+	content:url('../imgs/title_dec.png'); 
+	margin-right: 5px;
+}
+
+
+h1{
+	font-family: title_font;
+}
+@font-face{
+	font-family:title_font;
+	src: url('../fonts/ArnoPro-SmbdDisplay.otf') format('opentype');
+}
+@font-face{
+	font-family:eng_font;
+	src: url('../fonts/ArnoPro-Display.otf') format('opentype');
+}

@@ -1,0 +1,12 @@
+body{
+	background: rgb(50,50,50);
+}
+.minDisplay{
+	display: block;
+	text-align: center;
+	color: rgb(215,215,215);
+	font-weight: bold;
+}
+#menu,#content,#firma,#cinta{
+	display: none;
+}

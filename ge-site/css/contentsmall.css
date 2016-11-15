@@ -1,0 +1,46 @@
+#content{
+	font-family: Verdana;
+	color: #CCCCCC;
+	width: 100%;
+	background: rgb(50,50,50);
+	background-position: fixed;
+}
+.contentArt h1{
+	font-size: 2em;
+}
+
+.contentArt{
+	width: 100%;
+	padding-bottom: 50px;
+	border-top:1px solid white;
+	margin-top:-4px;
+	border-bottom: 3px solid #CCC;
+	background: rgb(50,50,50) url('../imgs/cinta.png') 0px -200px no-repeat;
+}
+.contentArt div{
+	margin: 0px 15%;
+}
+.contentImg{
+	display: none;
+}
+.widImg{
+	width: 100%;
+	border:1px solid rgb(230,230,230);
+	border-radius: 10px;
+	margin-bottom: 10px;
+}
+.tableContent{
+	font-size: 1em;
+	border-collapse: collapse;
+	width:100%;
+}
+.tableContent td{
+	border-bottom: 1px solid white;
+}
+.tableContent tr:last-child{
+	border-bottom: 3px solid white;
+}
+.imgTop{
+	width: 100%;
+	border-bottom: 3px solid rgb(215,215,215);
+}

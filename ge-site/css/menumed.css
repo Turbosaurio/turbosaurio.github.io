@@ -1,0 +1,67 @@
+.mediumDisplay{
+	display: inline;
+}
+.smallDisplay,
+.largeDisplay,
+.minDisplay{
+	display: none;
+}
+#menu{
+	position: fixed;
+	width: 200px;
+	padding: 0px;
+	left: 0px;
+	top: 0px;
+	z-index: 1;
+}
+#menuText{
+	width: 170px;
+	padding: 0px 15px;
+}
+#logo{
+	width: 20s0px;
+}
+#logo img{
+	width: 100%;
+}
+
+#cinta{
+	position: fixed;
+	top: 0px;
+	left: 200px;
+}
+#socialBottom{
+	margin-top: -10px;
+	
+	width: 170px;
+	text-align: right;
+	left: 0px;
+	bottom: 0px;
+}
+.eleMenu:hover,
+.listMenu:hover{
+	text-decoration: underline;
+}
+
+#menuList h5,
+#menuList ul,
+#menuList li{
+	margin: 0px 0px 5px 0px;
+	padding: 0px;
+}
+#menuList h3{
+	font-size: 1em;
+	font-weight: bold;
+	border-bottom: 2px solid rgb(50,50,50);
+}
+#menuList,#socialBottom{
+	padding: 15px;
+}
+.eleMenu,
+.listMenu{
+	font-size: 1em;
+}
+.dropDownUl{
+	margin-right: 10px;
+	text-align: left;
+}

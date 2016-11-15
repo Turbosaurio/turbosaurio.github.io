@@ -1,0 +1,63 @@
+body{
+	background: url("../imgs/leafB.jpg");
+}
+#content{
+	position:absolute;
+	top:60px;
+	left:0px;
+	width:100%;
+	font-family: Verdana;
+	color:#CCCCCC;
+}
+#content p:not(.emph, .quote){
+	text-align: justify;
+}
+.contentArt{
+	padding-top: 50px;
+	padding-bottom: 0px;
+	border-bottom: 2px solid white;
+	background: rgb(50,50,50) url('../imgs/cinta.png') 0px -200px no-repeat;
+	margin:0px auto;
+	width: 640px;
+}
+h1{
+	font-size: 2em;
+}
+p{font-size: 1em}
+.contentArt h1,
+.contentArt p,
+.contentArt table{
+	width: 60%;
+	margin:0px auto 15px auto;
+}
+.widImg{
+	width: 100%;
+}
+.emph{
+	width: 100%;
+}
+
+.contentImg{
+	display: none;
+}
+.imgTop{
+	width:100%;
+	margin-bottom:-4px;
+}
+
+.tableContent{
+	font-size: 11px;
+	border-collapse: collapse;
+	border-bottom: 5px solid #ccc;
+	margin-bottom: 15px;
+	width:70%;
+}
+.tableContent td:first-child{
+	text-align: right;
+	padding-right: 15px;
+}
+.tableContent td{
+	padding: 2px 0px;
+	border-bottom: 1px solid rgb(200,200,200);
+}
+#cinta{display: none}

@@ -1,0 +1,77 @@
+.smallDisplay{
+	display: block;
+}
+.largeDisplay,
+.mediumDisplay,
+.minDisplay{
+	display: none;
+}
+#burg{
+	display: none;
+}
+body{
+	margin: 0px;
+	padding: 0px;
+}
+#menu{
+	width: 100%;
+	background:#C2B59B;
+}
+#smallMenu{
+	width: 100%;
+	text-align: left;
+	background: #C2B59B;
+}
+#smallMenu img{
+	height: 50px;
+}
+#menuList,#socialBottom,#close{display:none;}
+#close img{
+	height: 50px;
+}
+/*#top{
+	background-image: url("../imgs/top.png");
+	height: 50px;
+	width: 50px;
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+}*/
+#close{
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	text-align: right;
+	background: #C2B59B;
+}
+#menuList,#menuText{
+	width:100%;
+}
+.dropDownUL{
+	margin:0px;
+}
+#menuList h5{
+	font-size: 1.3em;
+}
+#menuList ul{
+	font-size: 1em;
+}
+.eleMenu{
+	width: 100%;
+	text-indent: 20px;
+	border-bottom: 1px solid rgb(50,50,50);
+}
+.listMenu{	
+	margin:0px 0px 0px -40px;
+	padding:0px;
+	height: 60px;
+	line-height: 70px;
+	text-indent: 30px;
+	border-bottom: 1px solid #C2B59B;
+	color: #C2B59B;
+	background: rgb(50,50,50);
+}
+#cinta{
+	position: fixed;
+	left: 0px;
+}

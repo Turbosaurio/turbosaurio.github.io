@@ -1,0 +1,110 @@
+.largeDisplay{
+	display: inline;
+}
+.smallDisplay,
+.mediumDisplay,
+.minDisplay{
+	display: none;
+}
+
+#menu{
+	position: fixed;
+	top: 0px;
+	left: 117px;
+	z-index: 1;
+	width: 300px;
+}
+#logo{
+	position: absolute;
+	top:0px;
+}
+#burg{
+	margin:0px 0px 0px 55px;
+}
+#menuList{
+	position: absolute;
+	top: 251px;
+	width: 100%;
+} 
+
+#menuList h3{
+	font-size: 1.8em;
+	font-weight: bold;
+	border-bottom: 2px solid rgb(50,50,50);
+}
+#menuList h5{
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#menuList h5,
+#menuList ul,
+#menuList li{
+	margin: 0px 0px 0px 0px;
+	padding: 0px;
+}
+.eleMenu,
+.listMenu{
+	cursor: pointer;
+	list-style: none;
+}
+.eleMenu{
+	height: 35px;
+	line-height: 35px;
+	text-indent: 55px;
+}
+.listMenu{
+	color: #C2B59B;
+	text-indent: 65px;
+	line-height: 50px;
+	height: 50px;
+	background: rgb(50,50,50);
+	border-bottom: 1px solid #C2B59B;
+}
+
+#socialBottom{
+	position: fixed;
+	left: 117px;
+	bottom: 0px;
+	text-align: right;
+	width: 250px;
+	padding: 0px 25px;
+	vertical-align: bottom;
+}
+#socialBottom li{
+	padding-right: 15px;
+}
+#franja{
+	position: fixed;
+	width: 300px;
+	left: 117px;
+	height: 2000px;
+}
+#cinta{
+	position: fixed;
+	top: 0px;
+	left: 417px;
+	z-index: 1;
+}
+.searchM{
+	text-align: right;
+}
+.searchM input{
+	color: white;
+	height: 30px;
+	border: none;
+	border-radius: 50px;
+	margin-bottom: 10px;
+}
+#inT{
+	width: 180px;
+	padding-left: 40px;
+	background: rgb(50,50,50) url("../imgs/search.png") left no-repeat;
+}
+#inS{
+	border: 3px solid rgb(50,50,50);
+	color: rgb(50,50,50);
+}
+#inS:hover{
+	cursor: pointer;
+}

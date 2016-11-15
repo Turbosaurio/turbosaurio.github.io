@@ -1,0 +1,93 @@
+body{
+	background: url("../imgs/leafB.jpg");
+}
+#content{
+	font-family: Verdana;
+	color: #CCCCCC;
+	position: absolute;
+	top: 0px;
+	left: 417px;
+	width: 700px;
+	background: rgb(50,50,50);
+	border-radius: 0 0 30px 0;
+	padding: 0px;
+	margin: 0px;
+}
+#content p:not(.quote, .emph){
+	text-align: justify;
+}
+.imgTop{
+	margin-left: -200px;
+	height: 249px;
+	border-bottom: 4px solid rgb(200,200,200);
+}
+.contentArt{
+	width: 100%;
+	border-bottom: 2px solid rgb(200,200,200);
+	padding-bottom: 20px;
+}
+.contentArt div{
+	padding-left: 90px;
+	width: 400px;
+}
+.contentImg{
+	float: right;
+	width: 180px; 
+	margin-right: -210px;
+}
+#content article:last-child{
+	margin-bottom: 50px;
+	padding-bottom: 100px;
+}
+
+#content h1{
+	font-size: 36px;
+}
+#content p,
+#content li{
+	font-size: 14px;
+	list-style: inside;
+}
+
+.tableContent{
+	font-size: 11px;
+	border-collapse: collapse;
+	border-bottom: 5px solid #ccc;
+	margin-bottom: 15px;
+	width:400px;
+}
+.tableContent td:first-child{
+	text-align: right;
+	padding-right: 15px;
+}
+.tableContent td{
+	padding: 2px 0px;
+	border-bottom: 1px solid rgb(200,200,200);
+}
+.widImg{
+	width: 100%;
+	border: 1px solid rgb(230,230,230);
+	border-radius: 10px;
+	margin-bottom: 10px;
+}
+#firma{
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+	border-radius: 5px 0px 0px 0px;
+}
+
+.autor{
+	width:500px;
+	border-bottom: 2px solid rgb(200,200,200);
+	margin-bottom: 10px;
+}
+.autor .foto{
+	float:left;
+	margin: 0px;
+}
+.autor h4,
+.autor p,
+.autor ul{
+	margin:-5px 0px 10px 110px;
+}

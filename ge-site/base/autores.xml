@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autores>
+	<autor>
+		<nombre>Reinhold</nombre>
+		<id>AG001</id>
+		<apellidos>Méndez Rhi</apellidos>
+		<pais>México</pais>
+		<obras>
+			<libro>
+				<nombrelibro>La alegría de las pulgas</nombrelibro>
+				<fecha>01012015</fecha>
+				<generos>sátira novela comedia literatura ficticia</generos>
+				<description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum, neque ut elementum blandit, turpis mauris suscipit ipsum, ac ultricies est risus sed ipsum. Aliquam tristique quis nibh sed viverra. Sed risus libero, laoreet ut.</description>
+			</libro>
+			<libro>
+				<nombrelibro>El menudo vacilón</nombrelibro>
+				<fecha>01012012</fecha>
+				<generos>crónica baile autoeducación</generos>
+				<description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum, neque ut elementum blandit, turpis mauris suscipit ipsum, ac ultricies est risus sed ipsum. Aliquam tristique quis nibh sed viverra. Sed risus libero, laoreet ut.</description>
+			</libro>
+		</obras>
+	</autor>
+	<autor>
+		<nombre>José Luis Guerra</nombre>
+		<id>AG002</id>
+		<apellidos>Guerrero</apellidos>
+		<pais>Estados Unidos</pais>
+		<obras>
+			<libro>
+				<nombrelibro>Burbujas en el mar</nombrelibro>
+				<fecha>04151989</fecha>
+				<generos>guapachoso</generos>
+				<description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum, neque ut elementum blandit, turpis mauris suscipit ipsum, ac ultricies est risus sed ipsum. Aliquam tristique quis nibh sed viverra. Sed risus libero, laoreet ut.</description>
+			</libro>
+		</obras>
+	</autor>
+</autores>

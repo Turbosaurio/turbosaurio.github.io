@@ -158,8 +158,8 @@ function processToMove(route,floor){
 		ptm=0;
 
 		//////////update new position///////////////
-		posA.y=posB.y;
-		posA.x=posB.x;
+
+		posA=rotatePlayerPos(current_dir,posB,20);
 		posB.y="";
 		posB.x="";	
 
