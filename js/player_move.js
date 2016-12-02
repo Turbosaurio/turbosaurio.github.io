@@ -22,7 +22,7 @@ function showNPC(pos,floor){
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
 };
 
-var 	posA={y:5,x:5},
+var 	posA={y:6,x:18},
 	posB={y:"",x:""};
 var 	npcA={y:7, x:12};
 
@@ -31,20 +31,22 @@ function clickTile(floor){
 		$('.tileSelec').hide();
 		$('.mapObj').remove();
 		posB={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
-		var	//arr=eval('floor_'+floor),
-			arr=rotateLevel(eval('floor_'+floor),current_dir),
-			pos=rotatePlayerPos(current_dir,posA,arr.length),
-			pos_b=rotatePlayerPos(current_dir,posB,arr.length),
-			color=getColor(arr[pos.y][pos.x]);
-		console.log(pos);
-		console.log(pos_b);
+		var	arr=[];
+		arr=rotateLevel(eval('floor_'+floor),current_dir);
+		var	color=getColor(arr[posA.y][posA.x]);
+
+		console.log("A: "+posA.y+","+posA.x);
+		console.log("B: "+posB.y+","+posB.x);
+		console.log("tile: "+arr[posB.y][posB.x]);
 		console.log(current_dir);
 		//var	player_route=starRoute(rotateLevel(floor_2,"rot"),posA,posB,color);
 		//console.log(getDepths(player_route,floor));
 		
 		animatePlayer=setInterval(function(){
-			processToMove(starRoute(arr, pos, posB, color),floor);
+			processToMove(starRoute(arr, posA, posB, color),floor);
 		},animPlayTime);
+		//$('.tileSelec').show();
+		//$('#selec'+floor+"_"+posA.y+"_"+posA.x).hide();
 	});
 };
 
@@ -148,9 +150,7 @@ function processToMove(route,floor){
 	if(ptm%2==0)	playerFace(face,"a");
 	if(ptm%2!=0)	playerFace(face,"b")
 	ptm++;
-
 	if(ptm>route.length-1){
-	
 		clearInterval(animatePlayer);
 		star_openNodes.length=0;
 		star_closedNodes.length=0;
@@ -158,15 +158,15 @@ function processToMove(route,floor){
 		ptm=0;
 
 		//////////update new position///////////////
-
-		posA=rotatePlayerPos(current_dir,posB,20);
+		posA.y=posB.y;
+		posA.x=posB.x;
 		posB.y="";
 		posB.x="";	
 
 		$('.tileSelec').show();
 		$('#selec'+floor+"_"+posA.y+"_"+posA.x).hide();
 		//hideCurrentWall(floor,posA,'one');
-		mapButtons(floor,posA);
+		//mapButtons(floor,posA);
 		var pep=setTimeout(function(){playerFace(face,"c")},animPlayTime);
 	};
 };
