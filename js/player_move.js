@@ -22,7 +22,7 @@ function showNPC(pos,floor){
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
 };
 
-var 	posA={y:6,x:18},
+var 	posA={y:15,x:10},
 	posB={y:"",x:""};
 var 	npcA={y:7, x:12};
 
@@ -34,68 +34,23 @@ function clickTile(floor){
 		var	arr=[];
 		arr=rotateLevel(eval('floor_'+floor),current_dir);
 		var	color=getColor(arr[posA.y][posA.x]);
-
-		console.log("A: "+posA.y+","+posA.x);
-		console.log("B: "+posB.y+","+posB.x);
-		console.log("tile: "+arr[posB.y][posB.x]);
-		console.log(current_dir);
-		//var	player_route=starRoute(rotateLevel(floor_2,"rot"),posA,posB,color);
-		//console.log(getDepths(player_route,floor));
-		
 		animatePlayer=setInterval(function(){
 			processToMove(starRoute(arr, posA, posB, color),floor);
 		},animPlayTime);
-		//$('.tileSelec').show();
-		//$('#selec'+floor+"_"+posA.y+"_"+posA.x).hide();
 	});
 };
 
-var animatePlayer, animPlayTime=100;
+var animatePlayer, animPlayTime=250;
 var ptm=0;
 
 function playerFace(val,type){
-	var	x, px="px",
+	var	px="px",
 		y=[1,3,2,0,1,0,2,3],
-		w=-150, h=-300;
-	px="px";
-	if(type=="a"){
-		switch(val){
-			case 0: x=3; break;//S
-			case 1: x=2; break;//SW
-			case 2: x=2; break;//W
-			case 3: x=2; break;//NW
-			case 4: x=2; break;//N
-			case 5: x=3; break;//NE
-			case 6: x=3; break;//E
-			case 7: x=3;  break;//SE
-			default: break;
-		}
-	}if(type=="b"){
-		switch(val){
-			case 0: x=4; break;//S
-			case 1: x=1; break;//SW
-			case 2: x=1; break;//W
-			case 3: x=1; break;//NW
-			case 4: x=1; break;//N
-			case 5: x=4; break;//NE
-			case 6: x=4; break;//E
-			case 7: x=4; break;//SE
-			default: break;
-		}
-	}if(type=="c"){
-		switch(val){
-			case 0: x=5;break;//S
-			case 1: x=0;break;//SW
-			case 2: x=0;break;//W
-			case 3: x=0;break;//NW
-			case 4: x=0;break;//N
-			case 5: x=5;break;//NE
-			case 6: x=5; break;//E
-			case 7: x=5;break;//SE
-			default: break;
-		}
-	}
-	$('#jugador01').css({"background-position" : x*w+px+" "+y[val]*h+px});
+		x_a=[3,2,2,2,2,3,3,3], //////walking
+		x_b=[4,1,1,1,1,4,4,4], //////walking
+		x_c=[5,0,0,0,0,5,5,5], //////standing
+		x=eval('x_'+type)[val];
+	$('#jugador01').css({"background-position" : x*-150+px+" "+y[val]*-300+px});
 }
 function getDepths(route,f){
 	var	a=[];
@@ -129,13 +84,13 @@ function processToMove(route,floor){
 		dep=parseInt(mt.css('z-index'));
 
 	var lal=getDepths(route,floor);
-	$('#jugador01').css({'z-index': lal[ptm]});	
 	
+	$('#jugador01').css({'z-index': lal[ptm]});	
 	$('#jugador01').animate({
 		top: mik.y+px,
 		left: mik.x+px,
-		scrollTop: $('#jugador01').offset().top-200,
-		scrollLeft: $('#jugador01').offset().left-400
+		/*scrollTop: $('#jugador01').offset().top-200,
+		scrollLeft: $('#jugador01').offset().left-400*/
 	},animPlayTime);
 	var kek,face;
 	if(ptm==0)	kek=posA;
