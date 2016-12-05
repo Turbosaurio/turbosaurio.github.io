@@ -71,9 +71,8 @@ function rotateLevel(arr, dir){
 }
 
 function rotatePlayerPos(hand,pos,len){
-	console.log(current_dir);
 	var a=[];
-	for(var h=0;h<len;h++) a.push(addEmptyArr(len));
+	for(var h=0;h<len;h++) a[h]=addEmptyArr(len);
 	a[pos.y][pos.x]="hier";
 	var b=rotateLevel(a,hand);
 	//console.log(a);
@@ -81,6 +80,7 @@ function rotatePlayerPos(hand,pos,len){
 		for(var x=0;x<len;x++){
 			if(b[y][x]=="hier"){
 				//console.log(y+","+x);
+				rot_click++;
 				return {y,x};
 			}
 		}
@@ -326,25 +326,24 @@ $(document).ready(function(){
 	rotateFloorButton(current_floor);
 	startPlayer(current_floor,posA,getColor(eval('floor_'+2)[posA.y][posA.x]));
 });
-
+var rot_click=0;
 function rotateFloorButton(f){
 	$('#buttons').css('z-index', 1000);
 	$('.button_dev').bind('click', function(){
-		var to_cam,hand;
+		var to_cam;
+		//rot_click++;
 		switch($(this).attr('id')){
 			case "rotateCW":
 				if(current_dir=="ori") to_cam="rot";
 				if(current_dir=="rot") to_cam="inv";
 				if(current_dir=="rev") to_cam="ori";
 				if(current_dir=="inv") to_cam="rev";
-				hand="R";
 				break;
 			case "rotateCCW":
 				if(current_dir=="ori") to_cam="rev";
 				if(current_dir=="rot") to_cam="ori";
 				if(current_dir=="rev") to_cam="inv";
 				if(current_dir=="inv") to_cam="rot";
-				hand="L";
 				break;
 			default: break;
 		}
@@ -355,12 +354,14 @@ function rotateFloorButton(f){
 		}
 		startFloor(f,to_cam);
 		flipClass(rotateLevel(eval('floor_'+f),to_cam),f,to_cam);
+		var	newPos=rotatePlayerPos(to_cam,posA,eval('floor_'+f).length);
+		var	farbe=getColor(eval('floor_'+f)[newPos.y][newPos.x]);
+		startPlayer(f,newPos,farbe);
+
 		current_dir=to_cam;
-		var	newPos=rotatePlayerPos(current_dir,posA,eval('floor_'+f).length);
 		posA.y=newPos.y;
 		posA.x=newPos.x;
-		var	coeur=getColor(eval('floor_'+f)[posA.y][posA.x]);
-		startPlayer(f,posA,coeur);
+		console.log(rot_click+": "+to_cam+", pos: "+newPos.y+","+newPos.x);
 
 		/*console.log(coeur);
 		console.log(current_dir);
