@@ -306,8 +306,9 @@ function startPlayer(f,pos,color){
 	showPlayer(pos,f);
 	clickTile(f);
 };
-var	current_floor=2,
+var	current_floor=1,
 	current_dir="ori";
+
 
 $(document).ready(function(){
 	assignStyles();
@@ -323,45 +324,54 @@ $(document).ready(function(){
 		startFloor(kok,current_dir);
 	}
 	startFloor(current_floor,current_dir);
-	rotateFloorButton(current_floor);
-	startPlayer(current_floor,posA,getColor(eval('floor_'+2)[posA.y][posA.x]));
+	startPlayer(current_floor,posA,getColor(eval('floor_'+current_floor)[posA.y][posA.x]));
+	rotateFloorButton(current_floor,posA);
 });
 var rot_click=0;
-function rotateFloorButton(f){
+function rotateFloorButton(f,position){
 	$('#buttons').css('z-index', 1000);
-	$('.button_dev').bind('click', function(){
+	$('.button_dev').click(function(){
 		var to_cam;
 		//rot_click++;
 		switch($(this).attr('id')){
 			case "rotateCW":
 				if(current_dir=="ori") to_cam="rot";
 				if(current_dir=="rot") to_cam="inv";
-				if(current_dir=="rev") to_cam="ori";
 				if(current_dir=="inv") to_cam="rev";
+				if(current_dir=="rev") to_cam="ori";
 				break;
 			case "rotateCCW":
 				if(current_dir=="ori") to_cam="rev";
-				if(current_dir=="rot") to_cam="ori";
 				if(current_dir=="rev") to_cam="inv";
 				if(current_dir=="inv") to_cam="rot";
+				if(current_dir=="rot") to_cam="ori";
 				break;
 			default: break;
 		}
 		$('#piso'+f+' *').remove();
-		for(var r=0;r<f;r++){
-			startFloor(r,to_cam);
-			flipClass(rotateLevel(eval('floor_'+r),to_cam),r,to_cam);
+		if(f>0){
+			for(var r=0;r<f;r++){
+				startFloor(r,to_cam);
+				flipClass(rotateLevel(eval('floor_'+r),to_cam),r,to_cam);
+			}
 		}
 		startFloor(f,to_cam);
 		flipClass(rotateLevel(eval('floor_'+f),to_cam),f,to_cam);
-		var	newPos=rotatePlayerPos(to_cam,posA,eval('floor_'+f).length);
-		var	farbe=getColor(eval('floor_'+f)[newPos.y][newPos.x]);
-		startPlayer(f,newPos,farbe);
+		
+		/*var	newPos=rotatePlayerPos(to_cam,posA,eval('floor_'+f).length);
 
-		current_dir=to_cam;
 		posA.y=newPos.y;
 		posA.x=newPos.x;
-		console.log(rot_click+": "+to_cam+", pos: "+newPos.y+","+newPos.x);
+		console.log(rot_click+": "+to_cam+", pos: "+newPos.y+","+newPos.x);*/
+		current_dir=to_cam;
+		var	tempY=position.y, tempX=position.x;
+		var	newPos=rotatePlayerPos(to_cam,{y:tempY,x:tempX},eval('floor_'+f).length);
+		var	farbe=getColor(eval('floor_'+f)[newPos.y][newPos.x]);
+		startPlayer(f,newPos,farbe);
+	
+		console.log(posA);
+		posA=newPos;
+		//console.log(posA);
 
 		/*console.log(coeur);
 		console.log(current_dir);

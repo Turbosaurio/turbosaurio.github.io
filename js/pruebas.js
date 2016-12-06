@@ -39,46 +39,33 @@ function addButtons(len){
 	$('#buttonArea').append('<div class="button" id="btn_1">R</div>');
 	$('#buttonArea').append('<div class="button" id="btn_2">L</div>');
 	$('.button').bind('click', function(){
-		$('#name'+pos.y+"_"+pos.x).css({background: 'white', color: 'black'});
-		var	beb=$(this).attr('id'),
-			y=pos.y, x=pos.x;
-		switch(beb){
-			case 'btn_1':
-				if(current_pos=="ori"){
-					y*=-1;
-					y+=len;
-					current_pos='rot';
-				}if(current_pos=="rot"){
-					x*=-1;
-					x+=len;
-					current_pos="inv";
-				}if(current_pos=="inv"){
-					y*=-1;
-					y+=len;
-					current_pos='rev';
-				}if(current_pos=="rev"){
-					x*=-1;
-					x+=len;
-					current_pos="ori";
-				}
-				break;
-			case 'btn_2':
-
-				break;
+		//$('#name'+posA.y+"_"+posA.x).css({background: 'white', color: 'black'});
+		var cam;
+		switch($(this).attr('id')){
+			case "btn_1":
+				if(current_dir=="ori") cam="rot"; break;
+				if(current_dir=="rot") cam="inv"; break;
+				if(current_dir=="inv") cam="rev"; break;
+				if(current_dir=="rev") cam="ori"; break;
+			case "btn_2":
+				if(current_dir=="ori") cam="rev"; break;
+				if(current_dir=="rev") cam="inv"; break;
+				if(current_dir=="inv") cam="rot"; break;
+				if(current_dir=="rot") cam="ori"; break;
 			default: break;
 		}
-		pos.y=y;
-		pos.x=x;
-		console.log(current_pos);
-		console.log(pos);
+		var	lol=rotatePlayerPos(cam,posA,len);
+		posA.y=lol.y;
+		posA.x=lol.x;
+		console.log(current_dir+"_"+posA.y+","+posA.x);
 		showCurrent();
 	})
 }
-var	pos={y:4,x:9},
-	current_pos="ori";
+var	posA={y:4,x:9},
+	current_dir="ori";
 
 function showCurrent(){
-	$('#name'+pos.y+"_"+pos.x).addClass('current');
+	$('#name'+posA.y+"_"+posA.x).addClass('current');
 }
 $(document).ready(function(){
 	//var gog=[1,2,3,4,5];
@@ -87,3 +74,52 @@ $(document).ready(function(){
 	addButtons(15);
 	showCurrent();
 });
+
+function rotateLevel(arr, dir){
+	var a=[];
+	for(var h=0, j=arr.length-1; h<arr.length, j>=0; h++, j--){
+		a[h]=addEmptyArr(arr.length);
+		for(var n=0, m=arr.length-1; n<arr.length, m>=0; n++, m--){
+			switch(dir){
+				case 'ori':
+					a[h][n]=arr[h][n];
+					break;
+				case "rot":
+					a[h][n]=arr[m][h];
+					break;
+				case "rev":
+					a[h][n]=arr[n][j];
+					break;
+				case "inv":
+					a[h][n]=arr[j][m];
+					break;
+				default: break;
+			}
+		}
+	}
+	return a;
+}
+
+function rotatePlayerPos(hand,pos,len){
+	var a=[];
+	for(var h=0;h<len;h++) a[h]=addEmptyArr(len);
+	a[pos.y][pos.x]="hier";
+	var b=rotateLevel(a,hand);
+	//console.log(a);
+	for(var y=0;y<len;y++){
+		for(var x=0;x<len;x++){
+			if(b[y][x]=="hier"){
+				//console.log(y+","+x);
+				//rot_click++;
+				return {y,x};
+			}
+		}
+	}
+}
+function addEmptyArr(tot){
+	var e=[];
+	for(var h=0; h<tot; h++){
+		e.push("u");
+	}
+	return e;
+}

@@ -22,8 +22,8 @@ function showNPC(pos,floor){
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
 };
 
-var 	posA={y:15,x:10},
-	posB={y:"",x:""};
+var 	posA={y:15,x:10};
+var 	posB={y:"",x:""};
 var 	npcA={y:7, x:12};
 
 function clickTile(floor){
