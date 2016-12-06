@@ -9,6 +9,7 @@ function showPlayer(pos,floor){
 		'z-index': til.css('z-index')
 	});
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
+	playerFace(playerOr,"c");
 };
 function showNPC(pos,floor){
 	$('.almond').remove();
@@ -23,9 +24,10 @@ function showNPC(pos,floor){
 };
 
 var 	posA={y:15,x:10};
-var 	posB={y:"",x:""};
-var 	npcA={y:7, x:12};
+var	posB={y:"",x:""};
+var	npcA={y:7, x:12};
 
+var	playerOr=1;
 function clickTile(floor){
 	$('.tileSelec').click(function(){
 		$('.tileSelec').hide();
@@ -44,6 +46,16 @@ var animatePlayer, animPlayTime=250;
 var ptm=0;
 
 function playerFace(val,type){
+	/*
+	S 0
+	SW 1
+	W 2
+	NW 3
+	N 4 
+	NE 5
+	E 6
+	SE 7
+	*/
 	var	px="px",
 		y=[1,3,2,0,1,0,2,3],
 		x_a=[3,2,2,2,2,3,3,3], //////walking

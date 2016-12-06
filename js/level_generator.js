@@ -339,12 +339,22 @@ function rotateFloorButton(f,position){
 				if(current_dir=="rot") to_cam="inv";
 				if(current_dir=="inv") to_cam="rev";
 				if(current_dir=="rev") to_cam="ori";
+				if(playerOr>=6){
+					playerOr-=6;
+				}else{
+					playerOr+=2;
+				}
 				break;
 			case "rotateCCW":
 				if(current_dir=="ori") to_cam="rev";
 				if(current_dir=="rev") to_cam="inv";
 				if(current_dir=="inv") to_cam="rot";
 				if(current_dir=="rot") to_cam="ori";
+				if(playerOr<=1){
+					playerOr+=6;
+				}else{
+					playerOr-=2;
+				}
 				break;
 			default: break;
 		}
