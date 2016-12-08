@@ -75,12 +75,9 @@ function rotatePlayerPos(hand,pos,len){
 	for(var h=0;h<len;h++) a[h]=addEmptyArr(len);
 	a[pos.y][pos.x]="hier";
 	var b=rotateLevel(a,hand);
-	//console.log(a);
 	for(var y=0;y<len;y++){
 		for(var x=0;x<len;x++){
 			if(b[y][x]=="hier"){
-				//console.log(y+","+x);
-				rot_click++;
 				return {y,x};
 			}
 		}
@@ -122,7 +119,7 @@ function instanceColor(val,color){
 			}break; 
 
 		case 'red': 	
-			if(val==146 || val>147 && val<241){
+			if(val==182 || val>184 && val<361){
 				return true;
 			}break;
 		case 'green':
@@ -146,7 +143,7 @@ function instanceColor(val,color){
 }
 function getColor(val){
 	if(val==2 || val>4 && val<61) return 'yellow';
-	if(val==146 || val>147 && val<241) return 'red';
+	if(val==182 || val>184 && val<361) return 'red';
 	if(val==445 || val==446) return 'green';
 	if(val==290 || val>199 && val<361) return 'blue';
 	if(val>540 && val<581 || val==601 || val==602) return 'street';
@@ -162,7 +159,8 @@ function createSelectors(f,leng,color){
 				kak=sap.attr('level');
 			if(instanceColor(kak,color)){
 				selection.append('<div class="tileSelec" id="'+name+'" ypos="'+j+'" xpos="'+k+'">'+j+","+k+'</div>');
-				$('#selec'+f+"_"+posA.y+"_"+posA.x).hide();
+				//selection.append('<div class="tileSelec" id="'+name+'" ypos="'+j+'" xpos="'+k+'"></div>');
+				$('#selec'+f+"_"+Player.y+"_"+Player.x).hide();
 				$('#'+name).css({
 					top: sap.offset().top+226+"px",
 					left: sap.offset().left+35+"px"
@@ -170,40 +168,6 @@ function createSelectors(f,leng,color){
 			};				
 		};
 	};
-	/*for(var h=0, j=leng-1; h<leng, j>=0; h++, j--){
-		for(var n=0, m=leng-1; n<leng, m>=0; n++, m--){
-			var	y, x;
-			switch(current_dir){
-				case 'ori':
-					y=h;
-					x=n;
-					break;
-				case "rot":
-					y=m;
-					x=h;
-					break;
-				case "rev":
-					y=n;
-					x=j;
-					break;
-				case "inv":
-					y=j;
-					x=m;
-					break;
-				default: break;
-			}
-			var	sap=$('#tile'+f+'_'+y+"_"+x),
-				name='selec'+f+'_'+y+"_"+x;
-			if(instanceColor(sap.attr('level'),color)){
-				selection.append('<div class="tileSelec" id="'+name+'" ypos="'+y+'" xpos="'+x+'">'+current_dir+","+y+","+x+'</div>');
-				$('#selec'+f+"_"+posA.y+"_"+posA.x).hide();
-				$('#'+name).css({
-					top: sap.offset().top+226+"px",
-					left: sap.offset().left+35+"px"
-				});
-			};				
-		}
-	}*/
 };
 
 
@@ -324,69 +288,80 @@ $(document).ready(function(){
 		startFloor(kok,current_dir);
 	}
 	startFloor(current_floor,current_dir);
-	startPlayer(current_floor,posA,getColor(eval('floor_'+current_floor)[posA.y][posA.x]));
-	rotateFloorButton(current_floor,posA);
+	startPlayer(current_floor,Player.coord,getColor(eval('floor_'+current_floor)[Player.y][Player.x]));
+	rotateFloorButton(current_floor);
 });
+
 var rot_click=0;
-function rotateFloorButton(f,position){
+
+function rotateFloorButton(f){
 	$('#buttons').css('z-index', 1000);
 	$('.button_dev').click(function(){
-		var to_cam;
-		//rot_click++;
-		switch($(this).attr('id')){
-			case "rotateCW":
-				if(current_dir=="ori") to_cam="rot";
-				if(current_dir=="rot") to_cam="inv";
-				if(current_dir=="inv") to_cam="rev";
-				if(current_dir=="rev") to_cam="ori";
-				if(playerOr>=6){
-					playerOr-=6;
-				}else{
-					playerOr+=2;
-				}
-				break;
-			case "rotateCCW":
-				if(current_dir=="ori") to_cam="rev";
-				if(current_dir=="rev") to_cam="inv";
-				if(current_dir=="inv") to_cam="rot";
-				if(current_dir=="rot") to_cam="ori";
-				if(playerOr<=1){
-					playerOr+=6;
-				}else{
-					playerOr-=2;
-				}
-				break;
-			default: break;
-		}
-		$('#piso'+f+' *').remove();
-		if(f>0){
-			for(var r=0;r<f;r++){
-				startFloor(r,to_cam);
-				flipClass(rotateLevel(eval('floor_'+r),to_cam),r,to_cam);
-			}
-		}
-		startFloor(f,to_cam);
-		flipClass(rotateLevel(eval('floor_'+f),to_cam),f,to_cam);
-		
-		/*var	newPos=rotatePlayerPos(to_cam,posA,eval('floor_'+f).length);
-
-		posA.y=newPos.y;
-		posA.x=newPos.x;
-		console.log(rot_click+": "+to_cam+", pos: "+newPos.y+","+newPos.x);*/
-		current_dir=to_cam;
-		var	tempY=position.y, tempX=position.x;
-		var	newPos=rotatePlayerPos(to_cam,{y:tempY,x:tempX},eval('floor_'+f).length);
-		var	farbe=getColor(eval('floor_'+f)[newPos.y][newPos.x]);
-		startPlayer(f,newPos,farbe);
-	
-		console.log(posA);
-		posA=newPos;
-		//console.log(posA);
-
-		/*console.log(coeur);
-		console.log(current_dir);
-		console.log(posA);*/
+		//console.log('before');
+		//console.log(Player.coord);
+		rotateFloorAction(f,$(this).attr('id'),Player.coord,current_dir);
+		//console.log('after');
+		//console.log(Player.coord);
 	});
+}
+function rotateFloorAction(f,wo,position,c_d){
+	var to_cam;
+	switch(wo){
+		case "rotateCW":
+			switch(c_d){
+				case 'ori': to_cam="rot"; break;
+				case 'rot': to_cam="inv"; break;
+				case 'inv': to_cam="rev"; break;
+				case 'rev': to_cam="ori"; break;
+				default: break
+			}
+			if(Player.face>=6) Player.face-=6;
+			else Player.face+=2;
+		
+			break;
+		case "rotateCCW":
+			if(c_d=="ori") to_cam="rev";
+			if(c_d=="rev") to_cam="inv";
+			if(c_d=="inv") to_cam="rot";
+			if(c_d=="rot") to_cam="ori";
+			if(Player.face<=1){
+				Player.face+=6;
+			}else{
+				Player.face-=2;
+			}
+			break;
+		default: break;
+	}
+	$('#piso'+f+' *').remove();
+
+	flipFloors(f,to_cam);
+	flipPlayer(f,Player,to_cam);
+
+	/*var	newPos=rotatePlayerPos(to_cam,{y:position.y,x:position.x},eval('floor_'+f).length);
+	console.log(newPos);
+	var	farbe=getColor(rotateLevel(eval('floor_'+f),to_cam)[newPos.y][newPos.x]);
+	console.log(farbe);
+	startPlayer(f,newPos,farbe);
+	
+	Player.coord=newPos;
+	Player.update_coord();*/
+	current_dir=to_cam;
+}
+function flipFloors(f,cam){
+	if(f>0){
+		for(var r=0;r<f;r++){
+			startFloor(r,cam);
+			flipClass(rotateLevel(eval('floor_'+r),cam),r,cam);
+		}
+	}
+	startFloor(f,cam);
+	flipClass(rotateLevel(eval('floor_'+f),cam),f,cam);
+}
+function flipPlayer(f,play,cam){
+	var	newPos=rotatePlayerPos(cam,{y:play.y, x:play.x},eval('floor_'+f).length),
+		farbe=getColor(rotateLevel(eval('floor_'+f),cam)[newPos.y][newPos.x]);
+	startPlayer(f,newPos,farbe);
+	Player.coord=newPos;
 }
 function flipClass(arr,f,typ){
 	for(var g=0; g<arr.length; g++){

@@ -8,8 +8,9 @@ function showPlayer(pos,floor){
 		left: til.position().left+"px",
 		'z-index': til.css('z-index')
 	});
+	$('.tileSelec').show();
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
-	playerFace(playerOr,"c");
+	playerFace(Player.face,"c");
 };
 function showNPC(pos,floor){
 	$('.almond').remove();
@@ -23,21 +24,48 @@ function showNPC(pos,floor){
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
 };
 
-var 	posA={y:15,x:10};
-var	posB={y:"",x:""};
-var	npcA={y:7, x:12};
+//var 	posA={y:15,x:10};
+//var	posB={y:"",x:""};
+//var	npcA={y:7, x:12};
+//var	playerOr=1;
 
-var	playerOr=1;
+function playerAttr(y,x,face,name,c_floor){
+	this.name=name;
+	this.y=y;
+	this.x=x;
+	this.face=face;
+	this.coord={y:this.y,x:this.x};
+	this.c_floor=c_floor;
+
+	this.update_coord=function(){
+		this.y=this.coord.y;
+		this.x=this.coord.x;
+	}
+
+	this.set_y=function(y) {this.y=y}
+	this.set_x=function(x) {this.x=x}
+	this.set_x=function(face) {this.face=face}
+
+	this.set_floor=function(f) {this.c_floor=f}
+	this.set_face=function(face) {this.face=face}
+}
+var Player=new playerAttr(15,10,1,"jugador01",current_floor);
+
+function cameraAttr(){
+	
+}
 function clickTile(floor){
 	$('.tileSelec').click(function(){
 		$('.tileSelec').hide();
 		$('.mapObj').remove();
-		posB={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
+		var newPos={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
+		console.log(newPos);
 		var	arr=[];
 		arr=rotateLevel(eval('floor_'+floor),current_dir);
-		var	color=getColor(arr[posA.y][posA.x]);
+		var	color=getColor(arr[Player.y][Player.x]);
+		$('#buttons').fadeOut('fast');
 		animatePlayer=setInterval(function(){
-			processToMove(starRoute(arr, posA, posB, color),floor);
+			processToMove(starRoute(arr, Player.coord, newPos, color),floor,newPos);
 		},animPlayTime);
 	});
 };
@@ -89,7 +117,7 @@ function getDepths(route,f){
 	//console.log(a);
 	return a;
 }
-function processToMove(route,floor){
+function processToMove(route,floor,newPos){
 	var	mt=$('#tile'+floor+"_"+route[ptm].y+"_"+route[ptm].x),
 		mik={y: parseInt(mt.position().top),x: parseInt(mt.position().left)},
 		px="px",
@@ -97,15 +125,15 @@ function processToMove(route,floor){
 
 	var lal=getDepths(route,floor);
 	
-	$('#jugador01').css({'z-index': lal[ptm]});	
-	$('#jugador01').animate({
+	$('#jugador01').css({'z-index': dep});	
+	$('#jugador01').css({
 		top: mik.y+px,
 		left: mik.x+px,
 		/*scrollTop: $('#jugador01').offset().top-200,
 		scrollLeft: $('#jugador01').offset().left-400*/
-	},animPlayTime);
+	});
 	var kek,face;
-	if(ptm==0)	kek=posA;
+	if(ptm==0)	kek=Player.coord;
 	if(ptm>0)	kek=route[ptm-1];
 
 	for(var g=0;g<8;g++){
@@ -125,16 +153,19 @@ function processToMove(route,floor){
 		ptm=0;
 
 		//////////update new position///////////////
-		posA.y=posB.y;
-		posA.x=posB.x;
-		posB.y="";
-		posB.x="";	
+		
+		Player.coord.y=newPos.y;
+		Player.coord.x=newPos.x;
+		Player.update_coord();
+		Player.face=playerFace;
+		//console.log(Player.coord);
 
+		/////////reveal selectors////////////
 		$('.tileSelec').show();
-		$('#selec'+floor+"_"+posA.y+"_"+posA.x).hide();
-		//hideCurrentWall(floor,posA,'one');
-		//mapButtons(floor,posA);
-		var pep=setTimeout(function(){playerFace(face,"c")},animPlayTime);
+		$('#selec'+floor+"_"+Player.y+"_"+Player.x).hide();
+
+		var pep=setTimeout(function(){playerFace(face,"c")},animPlayTime,clearInterval(pep));
+		$('#buttons').fadeIn('fast');
 	};
 };
 
