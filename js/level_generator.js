@@ -270,9 +270,15 @@ function startPlayer(f,pos,color){
 	showPlayer(pos,f);
 	clickTile(f);
 };
-var	current_floor=1,
-	current_dir="ori";
-
+function playerAttr(y,x,face,cam,floor){
+	this.face=face;
+	this.cam=cam;
+	this.floor=floor;
+	this.coord={y,x};
+	this.set_y=function(e){this.coord.y=e};
+	this.set_x=function(e){this.coord.x=e};
+}
+var Player=new playerAttr(15,10,1,'ori',1);
 
 $(document).ready(function(){
 	assignStyles();
@@ -284,28 +290,22 @@ $(document).ready(function(){
 		
 	}
 	$('body').append('<div id="selection"/>');
-	for(var kok=0; kok<current_floor; kok++){
-		startFloor(kok,current_dir);
+	for(var kok=0; kok<Player.floor; kok++){
+		startFloor(kok,Player.cam);
 	}
-	startFloor(current_floor,current_dir);
-	startPlayer(current_floor,Player.coord,getColor(eval('floor_'+current_floor)[Player.y][Player.x]));
-	rotateFloorButton(current_floor);
+	startFloor(Player.floor,Player.cam);
+	startPlayer(Player.floor,Player.coord,getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]));
+	rotateFloorButton(Player.floor);
 });
-
-var rot_click=0;
 
 function rotateFloorButton(f){
 	$('#buttons').css('z-index', 1000);
 	$('.button_dev').click(function(){
-		//console.log('before');
-		//console.log(Player.coord);
-		rotateFloorAction(f,$(this).attr('id'),Player.coord,current_dir);
-		//console.log('after');
-		//console.log(Player.coord);
+		rotateFloorAction(f,$(this).attr('id'),Player.coord,Player.cam);
 	});
 }
 function rotateFloorAction(f,wo,position,c_d){
-	var to_cam;
+	var to_cam, face=Player.face;
 	switch(wo){
 		case "rotateCW":
 			switch(c_d){
@@ -314,38 +314,23 @@ function rotateFloorAction(f,wo,position,c_d){
 				case 'inv': to_cam="rev"; break;
 				case 'rev': to_cam="ori"; break;
 				default: break
-			}
-			if(Player.face>=6) Player.face-=6;
-			else Player.face+=2;
-		
+			}face>=6 ? face-=6 : face+=2;
 			break;
 		case "rotateCCW":
-			if(c_d=="ori") to_cam="rev";
-			if(c_d=="rev") to_cam="inv";
-			if(c_d=="inv") to_cam="rot";
-			if(c_d=="rot") to_cam="ori";
-			if(Player.face<=1){
-				Player.face+=6;
-			}else{
-				Player.face-=2;
-			}
+			switch(c_d){
+				case 'ori': to_cam='rev'; break;
+				case 'rev': to_cam='inv'; break;
+				case 'inv': to_cam='rot'; break;
+				case 'rot': to_cam='ori'; break;
+				default: break;
+			}face<=1 ? face+=6 : face-=2;
 			break;
 		default: break;
 	}
+	Player.cam=to_cam;
 	$('#piso'+f+' *').remove();
-
 	flipFloors(f,to_cam);
-	flipPlayer(f,Player,to_cam);
-
-	/*var	newPos=rotatePlayerPos(to_cam,{y:position.y,x:position.x},eval('floor_'+f).length);
-	console.log(newPos);
-	var	farbe=getColor(rotateLevel(eval('floor_'+f),to_cam)[newPos.y][newPos.x]);
-	console.log(farbe);
-	startPlayer(f,newPos,farbe);
-	
-	Player.coord=newPos;
-	Player.update_coord();*/
-	current_dir=to_cam;
+	flipPlayer(f,Player,to_cam,face);
 }
 function flipFloors(f,cam){
 	if(f>0){
@@ -357,11 +342,14 @@ function flipFloors(f,cam){
 	startFloor(f,cam);
 	flipClass(rotateLevel(eval('floor_'+f),cam),f,cam);
 }
-function flipPlayer(f,play,cam){
-	var	newPos=rotatePlayerPos(cam,{y:play.y, x:play.x},eval('floor_'+f).length),
+function flipPlayer(f,play,cam,face){
+	var	newPos=rotatePlayerPos(cam,{y:play.coord.y, x:play.coord.x},eval('floor_'+f).length),
 		farbe=getColor(rotateLevel(eval('floor_'+f),cam)[newPos.y][newPos.x]);
+	Player.face=face;
 	startPlayer(f,newPos,farbe);
-	Player.coord=newPos;
+}
+function update_player(p,attr){
+	p=new playerAttr(attr.y,attr.x,attr.face,"jugador01",attr.floor);
 }
 function flipClass(arr,f,typ){
 	for(var g=0; g<arr.length; g++){

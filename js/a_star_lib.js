@@ -131,7 +131,7 @@ var	star_node_start,
 	star_closedNodes=[],
 	star_nodesLoop=0;
 
-function starRoute(arrMap,start,end,t){
+function starRoute(arrMap,start,end,farbe){
 	star_node_start={y:start.y,x:start.x},
 	star_node_current={y:start.y,x:start.x},
 	star_node_end={y:end.y,x:end.x};
@@ -139,7 +139,7 @@ function starRoute(arrMap,start,end,t){
 		star_nodes[g]=addEmptyArr(arrMap.length);
 		for(var j=0;j<arrMap[0].length;j++){
 			var kak=arrMap[g][j];
-			if(instanceColor(kak,t)){
+			if(instanceColor(kak,farbe)){
 				star_nodes[g][j]="i";
 			}
 		};
@@ -150,4 +150,9 @@ function starRoute(arrMap,start,end,t){
 	var arr=findRoute(star_closedNodes,start);
 	arr.reverse	();
 	return arr;
+}
+function star_resetVars(){
+	star_openNodes.length=0;
+	star_closedNodes.length=0;
+	star_nodesLoop=0;
 }

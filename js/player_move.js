@@ -29,44 +29,28 @@ function showNPC(pos,floor){
 //var	npcA={y:7, x:12};
 //var	playerOr=1;
 
-function playerAttr(y,x,face,name,c_floor){
-	this.name=name;
-	this.y=y;
-	this.x=x;
-	this.face=face;
-	this.coord={y:this.y,x:this.x};
-	this.c_floor=c_floor;
-
-	this.update_coord=function(){
-		this.y=this.coord.y;
-		this.x=this.coord.x;
-	}
-
-	this.set_y=function(y) {this.y=y}
-	this.set_x=function(x) {this.x=x}
-	this.set_x=function(face) {this.face=face}
-
-	this.set_floor=function(f) {this.c_floor=f}
-	this.set_face=function(face) {this.face=face}
-}
-var Player=new playerAttr(15,10,1,"jugador01",current_floor);
-
-function cameraAttr(){
-	
-}
 function clickTile(floor){
 	$('.tileSelec').click(function(){
 		$('.tileSelec').hide();
 		$('.mapObj').remove();
 		var newPos={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
-		console.log(newPos);
+		var newOri=rotatePlayerPos(Player.cam, Player.coord,20);
+		var	color=getColor(rotateLevel(eval('floor_'+floor),Player.cam)[newOri.y][newOri.x]);
+		console.log("click: "+newPos.y+","+newPos.x);
+		console.log("from: "+newOri.y+","+newOri.x);
+		console.log(color);
 		var	arr=[];
-		arr=rotateLevel(eval('floor_'+floor),current_dir);
-		var	color=getColor(arr[Player.y][Player.x]);
+		arr=rotateLevel(eval('floor_'+floor),Player.cam);
 		$('#buttons').fadeOut('fast');
-		animatePlayer=setInterval(function(){
-			processToMove(starRoute(arr, Player.coord, newPos, color),floor,newPos);
-		},animPlayTime);
+		var route=starRoute(arr, newOri, newPos, color);
+		var pep=rotatePlayerPos(Player.cam,newPos,20);
+		if(route){
+			animatePlayer=setInterval(function(){
+				processToMove(route,floor,newPos);
+			},animPlayTime);
+		}else{
+			console.log(route);
+		}
 	});
 };
 
@@ -147,25 +131,28 @@ function processToMove(route,floor,newPos){
 	ptm++;
 	if(ptm>route.length-1){
 		clearInterval(animatePlayer);
-		star_openNodes.length=0;
-		star_closedNodes.length=0;
-		star_nodesLoop=0;
+		star_resetVars();
 		ptm=0;
 
 		//////////update new position///////////////
+		//Player.coord=newPos;
+		switch(Player.cam){
+			case 'ori': Player.coord=newPos; break;
+			case 'rev': Player.coord=rotatePlayerPos('rot',newPos,20); break;
+			case 'rot': Player.coord=rotatePlayerPos('rev',newPos,20); break;
+			case 'inv': Player.coord=rotatePlayerPos('inv',newPos,20); break;
+		}
+		//Player.coord=rotatePlayerPos(current_dir, newPos,20);
+		Player.face=face;
 		
-		Player.coord.y=newPos.y;
-		Player.coord.x=newPos.x;
-		Player.update_coord();
-		Player.face=playerFace;
-		//console.log(Player.coord);
-
 		/////////reveal selectors////////////
 		$('.tileSelec').show();
 		$('#selec'+floor+"_"+Player.y+"_"+Player.x).hide();
 
 		var pep=setTimeout(function(){playerFace(face,"c")},animPlayTime,clearInterval(pep));
 		$('#buttons').fadeIn('fast');
+		//var farbe=getColor(rotateLevel(eval('floor_'+floor),current_dir)[newPos.y][newPos.x]);
+		//startPlayer(floor,newPos,farbe);
 	};
 };
 
