@@ -93,9 +93,9 @@ function createLevel(arr,tar,clase,height,width,tileName,f,typ){
 			var	y=kak[h][p][0],
 				x=kak[h][p][1],
 				tile=kek[y][x];
-			if(tile>12 && tile<37 || tile>192 && tile<217){
-				tile+=24;
-			}
+			// if(tile>12 && tile<37 || tile>192 && tile<217){
+			// 	tile+=24;
+			// }
 
 			$('#'+tar).append('<tile id="'+tileName+f+"_"+y+"_"+x+'" class="'+clase+tile+'" level="'+tile+'" fpos="'+1+'" ypos="'+y+'" xpos="'+x+'"></tile>');			
 			$('#'+tileName+f+"_"+y+"_"+x).css({
@@ -114,7 +114,7 @@ function enterInstance(color){
 function instanceColor(val,color){
 	switch(color){
 		case 'yellow': 
-			if(val==2 || val>4 && val<61){
+			if(val==2 || val>4 && val<80){
 				return true;
 			}break; 
 
@@ -142,7 +142,7 @@ function instanceColor(val,color){
 	}
 }
 function getColor(val){
-	if(val==2 || val>4 && val<61) return 'yellow';
+	if(val==2 || val>4 && val<80) return 'yellow';
 	if(val==182 || val>184 && val<361) return 'red';
 	if(val==445 || val==446) return 'green';
 	if(val==290 || val>199 && val<361) return 'blue';
@@ -158,9 +158,9 @@ function createSelectors(f,leng,color){
 				name='selec'+f+'_'+j+"_"+k,
 				kak=sap.attr('level');
 			if(instanceColor(kak,color)){
-				selection.append('<div class="tileSelec" id="'+name+'" ypos="'+j+'" xpos="'+k+'">'+j+","+k+'</div>');
-				//selection.append('<div class="tileSelec" id="'+name+'" ypos="'+j+'" xpos="'+k+'"></div>');
-				$('#selec'+f+"_"+Player.y+"_"+Player.x).hide();
+				//selection.append('<div class="tileSelec" id="'+name+'" ypos="'+j+'" xpos="'+k+'">'+j+","+k+'</div>');
+				selection.append('<div class="tileSelec" id="'+name+'" ypos="'+j+'" xpos="'+k+'"></div>');
+				//$('#selec'+f+"_"+Player.y+"_"+Player.x).hide();
 				$('#'+name).css({
 					top: sap.offset().top+226+"px",
 					left: sap.offset().left+35+"px"
@@ -275,10 +275,8 @@ function playerAttr(y,x,face,cam,floor){
 	this.cam=cam;
 	this.floor=floor;
 	this.coord={y,x};
-	this.set_y=function(e){this.coord.y=e};
-	this.set_x=function(e){this.coord.x=e};
 }
-var Player=new playerAttr(15,10,1,'ori',1);
+var Player=new playerAttr(7,7,1,'ori',2);
 
 $(document).ready(function(){
 	assignStyles();
@@ -356,33 +354,12 @@ function flipClass(arr,f,typ){
 		for(var i=0;i<arr[0].length; i++){
 			var t=arr[g][i];
 			if(
-			t>4 && t<177 || t>185 && t<353 || t>360 && t<425 || 
+			t>4 && t<181 || t>185 && t<353 || t>360 && t<425 || 
 			t>540 && t<581 || t>640 && t<717 ||
 			t>724 && t<797 || t>824 && t<885
 			){////yellow
-				var p;
-				switch(typ){
-					case "rot":
-						if(arr[g][i]%4==0) p=-3;
-						else p=1;
-						break;
-					case "rev":
-						if(arr[g][i]%4==1) p=+3;
-						else p=-1;
-						break;
-					case "inv":
-						if(arr[g][i]%4==0) p=-2;
-						if(arr[g][i]%4==3) p=-2;
-						if(arr[g][i]%4==2) p=+2;
-						if(arr[g][i]%4==1) p=+2;
-						break;
-					case "ori":
-						p=0;
-						break;
-					default: break;
-				}
 				var tile=$('#tile'+f+"_"+g+"_"+i);
-				tile.attr({class: "txt"+(parseInt(tile.attr('level'))+p)});
+				tile.attr({class: "txt"+(parseInt(tile.attr('level'))+flipTileWall(typ,arr[g][i]))});
 			}
 		}
 	}

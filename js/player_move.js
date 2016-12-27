@@ -24,21 +24,17 @@ function showNPC(pos,floor){
 	$('#selec'+floor+'_'+pos.y+'_'+pos.x).css('display','none');
 };
 
-//var 	posA={y:15,x:10};
-//var	posB={y:"",x:""};
-//var	npcA={y:7, x:12};
-//var	playerOr=1;
-
 function clickTile(floor){
 	$('.tileSelec').click(function(){
+		var lim=eval('floor_'+floor).length;
 		$('.tileSelec').hide();
 		$('.mapObj').remove();
 		var newPos={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
 		var newOri=rotatePlayerPos(Player.cam, Player.coord,20);
 		var	color=getColor(rotateLevel(eval('floor_'+floor),Player.cam)[newOri.y][newOri.x]);
-		console.log("click: "+newPos.y+","+newPos.x);
+		/*console.log("click: "+newPos.y+","+newPos.x);
 		console.log("from: "+newOri.y+","+newOri.x);
-		console.log(color);
+		console.log(color);*/
 		var	arr=[];
 		arr=rotateLevel(eval('floor_'+floor),Player.cam);
 		$('#buttons').fadeOut('fast');
@@ -51,6 +47,8 @@ function clickTile(floor){
 		}else{
 			console.log(route);
 		}
+		clearWalls(lim,"show");
+		//restoreWalls(lim,newOri,floor);
 	});
 };
 
@@ -79,7 +77,7 @@ function playerFace(val,type){
 function getDepths(route,f){
 	var	a=[];
 	//console.log(route.length);
-		//a[0]=parseInt($('#tile'+f+"_"+posA.y+"_"+posA.x).css('z-index'));
+	//a[0]=parseInt($('#tile'+f+"_"+posA.y+"_"+posA.x).css('z-index'));
 	//a.push("p: "+parseInt($('#tile'+f+"_"+posA.y+"_"+posA.x).css('z-index')));
 	for(var r=0;r<route.length;r++){
 		var	uno=parseInt($('#tile'+f+"_"+route[r].y+"_"+route[r].x).css('z-index')),
@@ -105,7 +103,8 @@ function processToMove(route,floor,newPos){
 	var	mt=$('#tile'+floor+"_"+route[ptm].y+"_"+route[ptm].x),
 		mik={y: parseInt(mt.position().top),x: parseInt(mt.position().left)},
 		px="px",
-		dep=parseInt(mt.css('z-index'));
+		dep=parseInt(mt.css('z-index')),
+		lang=eval("floor_"+floor).length;
 
 	var lal=getDepths(route,floor);
 	
@@ -135,19 +134,19 @@ function processToMove(route,floor,newPos){
 		ptm=0;
 
 		//////////update new position///////////////
-		//Player.coord=newPos;
 		switch(Player.cam){
 			case 'ori': Player.coord=newPos; break;
-			case 'rev': Player.coord=rotatePlayerPos('rot',newPos,20); break;
-			case 'rot': Player.coord=rotatePlayerPos('rev',newPos,20); break;
-			case 'inv': Player.coord=rotatePlayerPos('inv',newPos,20); break;
+			case 'rev': Player.coord=rotatePlayerPos('rot',newPos,lang); break;
+			case 'rot': Player.coord=rotatePlayerPos('rev',newPos,lang); break;
+			case 'inv': Player.coord=rotatePlayerPos('inv',newPos,lang); break;
+			default: break;
 		}
-		//Player.coord=rotatePlayerPos(current_dir, newPos,20);
 		Player.face=face;
-		
+		clearWalls(lang,"hide");
+
 		/////////reveal selectors////////////
 		$('.tileSelec').show();
-		$('#selec'+floor+"_"+Player.y+"_"+Player.x).hide();
+		$('#selec'+floor+"_"+newPos.y+"_"+newPos.x).hide();
 
 		var pep=setTimeout(function(){playerFace(face,"c")},animPlayTime,clearInterval(pep));
 		$('#buttons').fadeIn('fast');
@@ -155,7 +154,106 @@ function processToMove(route,floor,newPos){
 		//startPlayer(floor,newPos,farbe);
 	};
 };
+function getNeighTiles(f,pos,lim){
+	var a=[];
+	for(var g=0;g<=8;g++){
+		var	y=neighNodes(g).y+pos.y,
+			x=neighNodes(g).x+pos.x;
+		if(y>=0 && y<lim || x>=0 && x<lim){
+			var value=eval('floor_'+f)[y][x];
+			if(rotableWalls(getColor(value), value)){
+				a.push({y,x});
+			}
+		}if(g==8){
+			a.push(pos);
+		}
+	}
+	return a;
+}
+function clearWalls(lim,mode){
+	var	a=getNeighTiles(Player.floor,Player.coord,lim),
+		coord=rotatePlayerPos(Player.cam,Player.coord,lim),
+		farbe=getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]);
 
+	for(var h=0;h<a.length;h++){
+		var	newCoord=rotatePlayerPos(Player.cam,a[h],lim),
+			tile=$('#tile'+Player.floor+"_"+newCoord.y+"_"+newCoord.x),
+			lvl=parseInt(tile.attr('level')),
+			level=flipTileWall(Player.cam,lvl),
+			texture;
+		switch(mode){
+			case "hide": 
+				if(wallValue(farbe,lvl)==lvl){
+					texture=lvl;
+				}else{
+					texture=level+wallValue(farbe,lvl);
+				}
+				//tile.hide();
+				tile.attr('class','txt'+Math.abs(texture)); 
+				break;
+			case "show":
+				if(lvl>2 && lvl<181){
+					texture=lvl+level;
+				}else{
+					texture=lvl;
+				}
+				//tile.hide();
+				tile.attr('class','txt'+Math.abs(texture));
+				break;
+		}	
+	}
+}
+function wallValue(farbe,val){
+	var p=0;
+	if(farbe=="yellow"){
+		if(val>2 && val<37) p=24;
+		if(val>60 && val<69) p=8;
+		if(val>80 && val<121) p=20;
+	}
+////////////rest of color ranges here 
+
+
+////////////////////////////////////////////////
+	return val+p;
+}
+function flipTileWall(cam,value){
+	var p;
+	switch(cam){
+		case "rot":
+			if(value%4==0) p=-3;
+			else p=1;
+			break;
+		case "rev":
+			if(value%4==1) p=+3;
+			else p=-1;
+			break;
+		case "inv":
+			if(value%4==0) p=-2;
+			if(value%4==3) p=-2;
+			if(value%4==2) p=+2;
+			if(value%4==1) p=+2;
+			break;
+		case "ori":
+			p=0;
+			break;
+		default: break;
+	}
+	return parseInt(p);
+}
+
+function rotableWalls(farbe,val){
+	switch(farbe){
+		case 'yellow':
+			if(val>12 && val<37 || val>60 && val<69 || val>80 && val<121){
+			return true;
+		}break;
+		////////////rest of color ranges here 
+
+
+		////////////////////////////////////////////////
+		default: return false; break;
+	}
+}
 
 function actionValidate(val){
 	var actions=[
