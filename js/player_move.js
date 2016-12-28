@@ -143,7 +143,7 @@ function processToMove(route,floor,newPos){
 		}
 		Player.face=face;
 		clearWalls(lang,"hide");
-
+		analizeWalls(lang);
 		/////////reveal selectors////////////
 		$('.tileSelec').show();
 		$('#selec'+floor+"_"+newPos.y+"_"+newPos.x).hide();
@@ -160,19 +160,56 @@ function getNeighTiles(f,pos,lim){
 		var	y=neighNodes(g).y+pos.y,
 			x=neighNodes(g).x+pos.x;
 		if(y>=0 && y<lim || x>=0 && x<lim){
-			var value=eval('floor_'+f)[y][x];
-			if(rotableWalls(getColor(value), value)){
-				a.push({y,x});
-			}
+			a.push({y,x});
 		}if(g==8){
 			a.push(pos);
 		}
 	}
 	return a;
 }
+function findAction(val){
+	//console.log(val);
+	var	a=[],
+		actions=[
+		/////doors
+		61,62,63,64,65,66,67,68,
+		/////stairs up yellow
+		81,82,83,84,101,102,103,104,121,122,123,124
+	];
+	for(var g=0;g<actions.length;g++){
+		//console.log(actions[g]);
+		if(val==actions[g]){
+			//console.log("es gibt ein: "+actions[g]);
+			a.push(actions[g]);
+		}
+	}
+	return a;
+}
+function analizeWalls(lim){
+	var	a=getNeighTiles(Player.floor,Player.coord,lim);
+	for(var h=0;h<a.length;h++){
+		var action=eval('floor_'+Player.floor)[a[h].y][a[h].x];
+		if(findAction(action).length>0){
+			createActionButtons(action);
+		}
+	}
+}
+function createActionButtons(arr){
+	//showActionBubble();
+	var action;
+	for(var g=0;g<arr.length;g++){
+		if(arr[g]>=61 && arr[g]<=68){////////////enter
+			action="enter";
+		}
+		if(arr[g]>=81 && arr[g]<=124){////////////up yellow
+			action="one_up";
+		}
+		console.log(action);
+		$('#bubble').append('<div id="'+g+'" action="'+action+'" class="a_btn"/>')
+	}
+}
 function clearWalls(lim,mode){
 	var	a=getNeighTiles(Player.floor,Player.coord,lim),
-		coord=rotatePlayerPos(Player.cam,Player.coord,lim),
 		farbe=getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]);
 
 	for(var h=0;h<a.length;h++){
@@ -180,27 +217,19 @@ function clearWalls(lim,mode){
 			tile=$('#tile'+Player.floor+"_"+newCoord.y+"_"+newCoord.x),
 			lvl=parseInt(tile.attr('level')),
 			level=flipTileWall(Player.cam,lvl),
-			texture;
-		switch(mode){
-			case "hide": 
-				if(wallValue(farbe,lvl)==lvl){
-					texture=lvl;
-				}else{
+			texture=lvl,
+			value=eval('floor_'+Player.floor)[a[h].y][a[h].x];
+		if(rotableWalls(getColor(value), value)){
+			switch(mode){
+				case "hide": 
 					texture=level+wallValue(farbe,lvl);
-				}
-				//tile.hide();
-				tile.attr('class','txt'+Math.abs(texture)); 
-				break;
-			case "show":
-				if(lvl>2 && lvl<181){
+					break;
+				case "show":
 					texture=lvl+level;
-				}else{
-					texture=lvl;
-				}
-				//tile.hide();
-				tile.attr('class','txt'+Math.abs(texture));
-				break;
-		}	
+					break;
+			}	
+			tile.attr('class','txt'+Math.abs(texture)); 
+		}
 	}
 }
 function wallValue(farbe,val){
