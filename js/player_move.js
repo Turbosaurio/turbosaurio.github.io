@@ -28,7 +28,7 @@ function clickTile(floor){
 	$('.tileSelec').click(function(){
 		var lim=eval('floor_'+floor).length;
 		$('.tileSelec').hide();
-		$('.mapObj').remove();
+		$('.a_btn').remove();
 		var newPos={y:parseInt($(this).attr('ypos')),x:parseInt($(this).attr('xpos'))};
 		var newOri=rotatePlayerPos(Player.cam, Player.coord,20);
 		var	color=getColor(rotateLevel(eval('floor_'+floor),Player.cam)[newOri.y][newOri.x]);
@@ -109,12 +109,12 @@ function processToMove(route,floor,newPos){
 	var lal=getDepths(route,floor);
 	
 	$('#jugador01').css({'z-index': dep});	
-	$('#jugador01').css({
+	$('#jugador01').animate({
 		top: mik.y+px,
 		left: mik.x+px,
 		/*scrollTop: $('#jugador01').offset().top-200,
 		scrollLeft: $('#jugador01').offset().left-400*/
-	});
+	},animPlayTime);
 	var kek,face;
 	if(ptm==0)	kek=Player.coord;
 	if(ptm>0)	kek=route[ptm-1];
@@ -174,39 +174,68 @@ function findAction(val){
 		/////doors
 		61,62,63,64,65,66,67,68,
 		/////stairs up yellow
-		81,82,83,84,101,102,103,104,121,122,123,124
+		81,82,83,84,101,102,103,104,121,122,123,124,
+		/////stairs up red
+		261,262,263,264,281,282,283,284,301,302,303,304
 	];
 	for(var g=0;g<actions.length;g++){
 		//console.log(actions[g]);
 		if(val==actions[g]){
 			//console.log("es gibt ein: "+actions[g]);
-			a.push(actions[g]);
+			return actions[g];
+			//a.push(actions[g]);
 		}
 	}
-	return a;
+	//return a;
 }
 function analizeWalls(lim){
-	var	a=getNeighTiles(Player.floor,Player.coord,lim);
+	var	a=getNeighTiles(Player.floor,Player.coord,lim),
+		b=[];
 	for(var h=0;h<a.length;h++){
 		var action=eval('floor_'+Player.floor)[a[h].y][a[h].x];
-		if(findAction(action).length>0){
-			createActionButtons(action);
+		if(findAction(action)!=undefined){
+			//console.log(a.length);
+			b.push(findAction(action));
 		}
 	}
+	//console.log(b);
+	createActionButtons(b);
 }
 function createActionButtons(arr){
 	//showActionBubble();
 	var action;
+	//console.log(arr.length);
 	for(var g=0;g<arr.length;g++){
 		if(arr[g]>=61 && arr[g]<=68){////////////enter
 			action="enter";
 		}
-		if(arr[g]>=81 && arr[g]<=124){////////////up yellow
+		if(arr[g]>=81 && arr[g]<=124 || arr[g]>=260 && arr[g]<=305){////////////up yellow
 			action="one_up";
 		}
-		console.log(action);
-		$('#bubble').append('<div id="'+g+'" action="'+action+'" class="a_btn"/>')
+		//console.log(action);
+		$('body').append('<div id="p_btn'+g+'" p_a="'+action+'" class="a_btn"/>');
+		var play=$('#jugador01').offset();
+		$('#p_btn'+g).css({
+			top: play.top+"px",
+			left: play.left+(70*g)+"px",
+			'z-index': 1000+g
+		});
 	}
+	$('.a_btn').click(function(){
+		var g=$(this).attr('p_a');
+		console.log(g);
+		switch(g){
+			case "one_up":
+				console.log('up');
+				$('#jugador01, .a_btn').remove();
+				clearWalls(20,"show");
+				Player.floor+=1;
+				startFloor(Player.floor,Player.cam)
+				startPlayer(Player.floor,Player.coord,getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]));
+				break;
+			default: break;
+		}
+	});
 }
 function clearWalls(lim,mode){
 	var	a=getNeighTiles(Player.floor,Player.coord,lim),
@@ -232,21 +261,66 @@ function clearWalls(lim,mode){
 		}
 	}
 }
+function getRanges(color){
+	var rangos=[13,24,25,36,61,68,81,120];
+	return rangos;
+}
 function wallValue(farbe,val){
-	var p=0;
-	if(farbe=="yellow"){
-		if(val>2 && val<37) p=24;
-		if(val>60 && val<69) p=8;
-		if(val>80 && val<121) p=20;
+	var p=0, lol=getRanges(), e;
+	switch(farbe){
+		case "yellow": e=0; break;
+		case "red": e=180; break;
+		case "blue": e=360; break;
+		default: break;
+	}
+	/*if(val>(lol[0]+e) && val<(lol[1]+e)) p=24;
+	if(val>(lol[2]+e) && val<(lol[3]+e)) p=8;
+	if(val>(lol[4]+e) && val<(lol[5]+e)) p=20;*/
+
+	if(val>=lol[0]+e && val<=lol[1]+e){
+		 if(val%4==0 || val%4==3){
+			p=24;
+		 }
+	}
+	if(val>=lol[2]+e && val<=lol[3]+e){
+		if(val%4==0 || val%4==3 || val%4==2){
+			p=24;
+		}
+
+	}
+	if(val>=lol[4]+e && val<=lol[5]+e){
+		if(val%4==0 || val%4==3){
+			p=8;
+		}
+	}
+	if(val>=lol[6]+e && val<=lol[7]+e){
+		if(val%4==0 || val%4==3){
+			p=20;
+		}
+	}
+	
+
+	return val+p;
+	/*if(farbe=="yellow"){
+		if(val%4!=1){
+			if(val>2 && val<37) p=24;
+			if(val>60 && val<69) p=8;
+			if(val>80 && val<121) p=20;
+		}
 	}
 ////////////rest of color ranges here 
-
-
+	if(farbe=="red"){
+		if(val%4!=1){
+			if(val>182 && val<217) p=24;
+			if(val>240 && val<249) p=8;
+			if(val>261 && val<301) p=20;
+		}
+	}
 ////////////////////////////////////////////////
-	return val+p;
+	return val+p;*/
 }
 function flipTileWall(cam,value){
-	var p;
+	var p=0;
 	switch(cam){
 		case "rot":
 			if(value%4==0) p=-3;
@@ -271,16 +345,18 @@ function flipTileWall(cam,value){
 }
 
 function rotableWalls(farbe,val){
+	var e;
 	switch(farbe){
-		case 'yellow':
-			if(val>12 && val<37 || val>60 && val<69 || val>80 && val<121){
-			return true;
-		}break;
-		////////////rest of color ranges here 
-
-
-		////////////////////////////////////////////////
+		case 'yellow': e=0; break;
+		case 'red': e=180; break;
+		case 'blue': e=360; break;
 		default: return false; break;
+	}
+	var a=getRanges();
+	if(val>(a[0]+e+10) && val<(a[1]+e) || val>(a[2]+e) && val<(a[3]+e) || val>(a[4]+e) && val<(a[5]+e)){
+		return true;
+	}else{
+		return false;
 	}
 }
 

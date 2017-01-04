@@ -84,7 +84,7 @@ function rotatePlayerPos(hand,pos,len){
 	}
 }
 
-function createLevel(arr,tar,clase,height,width,tileName,f,typ){
+function createLevel(arr,tar,height,width,tileName,f,typ){
 	var	kak=rotateArr(arr),
 		kek=rotateLevel(arr,typ),
 		kok=c_x(arr.length+1,width), xpos=0;
@@ -92,12 +92,10 @@ function createLevel(arr,tar,clase,height,width,tileName,f,typ){
 		for(var p=0;p<kak[h].length;p++){
 			var	y=kak[h][p][0],
 				x=kak[h][p][1],
-				tile=kek[y][x];
-			// if(tile>12 && tile<37 || tile>192 && tile<217){
-			// 	tile+=24;
-			// }
-
-			$('#'+tar).append('<tile id="'+tileName+f+"_"+y+"_"+x+'" class="'+clase+tile+'" level="'+tile+'" fpos="'+1+'" ypos="'+y+'" xpos="'+x+'"></tile>');			
+				tile=kek[y][x],
+				clas="txt"+(parseInt(tile)+flipTileWall(typ,tile));
+			//$('#'+tar).append('<tile id="'+tileName+f+"_"+y+"_"+x+'" class="'+clase+(parseInt(tile)+flipTileWall(typ,kek[y][x]))+'" level="'+tile+'" fpos="'+1+'" ypos="'+y+'" xpos="'+x+'"></tile>');			
+			$('#'+tar).append('<tile id="'+tileName+f+"_"+y+"_"+x+'" class="'+"txt"+tile+'" level="'+tile+'" fpos="'+1+'" ypos="'+y+'" xpos="'+x+'"></tile>');			
 			$('#'+tileName+f+"_"+y+"_"+x).css({
 				top: h*height+"px",	
 				left: kok[xpos]+"px",
@@ -106,6 +104,7 @@ function createLevel(arr,tar,clase,height,width,tileName,f,typ){
 			xpos++;
 		}
 	}
+	flipClass(kek,f,typ);
 	pisos[f]="open";
 }
 function enterInstance(color){
@@ -114,12 +113,11 @@ function enterInstance(color){
 function instanceColor(val,color){
 	switch(color){
 		case 'yellow': 
-			if(val==2 || val>4 && val<80){
+			if(val==2 || val>4 && val<180){
 				return true;
 			}break; 
-
 		case 'red': 	
-			if(val==182 || val>184 && val<361){
+			if(val==182 || val>184 && val<261){
 				return true;
 			}break;
 		case 'green':
@@ -142,8 +140,8 @@ function instanceColor(val,color){
 	}
 }
 function getColor(val){
-	if(val==2 || val>4 && val<80) return 'yellow';
-	if(val==182 || val>184 && val<361) return 'red';
+	if(val==2 || val>4 && val<180) return 'yellow';
+	if(val==182 || val>184 && val<261) return 'red';
 	if(val==445 || val==446) return 'green';
 	if(val==290 || val>199 && val<361) return 'blue';
 	if(val>540 && val<581 || val==601 || val==602) return 'street';
@@ -257,7 +255,7 @@ var	t_w=34,
 function startFloor(f,typ){
 	var arr=eval('floor_'+f);
 	$('#piso'+f+' *').remove();
-	createLevel(arr,'piso'+f,"txt",t_w,t_h,'tile',f,typ);
+	createLevel(arr,'piso'+f,t_w,t_h,'tile',f,typ);
 	/*$('html, body').animate({
 		scrollTop: $('#jugador01').offset().top-200,
 		scrollLeft: $('#jugador01').offset().left-300
@@ -270,41 +268,48 @@ function startPlayer(f,pos,color){
 	showPlayer(pos,f);
 	clickTile(f);
 };
-function playerAttr(y,x,face,cam,floor){
-	this.face=face;
-	this.cam=cam;
-	this.floor=floor;
-	this.coord={y,x};
-}
-var Player=new playerAttr(7,7,1,'ori',2);
 
-$(document).ready(function(){
-	assignStyles();
-	for(var r=0, u=pisos.length;r<=pisos.length, u>=0;r++, u--){
-		$('body').append('<div class="floor" id="piso'+r+'"/>');
-		$('#piso'+r).css({
-			top: u*225+"px"
-		});
-		
-	}
-	$('body').append('<div id="selection"/>');
-	for(var kok=0; kok<Player.floor; kok++){
-		startFloor(kok,Player.cam);
-	}
-	startFloor(Player.floor,Player.cam);
-	startPlayer(Player.floor,Player.coord,getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]));
-	rotateFloorButton(Player.floor);
-});
-
-function rotateFloorButton(f){
+function rotateFloorButton(){
 	$('#buttons').css('z-index', 1000);
 	$('.button_dev').click(function(){
-		rotateFloorAction(f,$(this).attr('id'),Player.coord,Player.cam);
+		rotateFloorAction(Player.floor,$(this).attr('id'),Player.coord,Player.cam);
+		$('.a_btn').remove();
 	});
 }
+
+function flipCamera(cam,t){
+	var to_cam;
+	switch(t){
+		case "rotateCW":
+			switch(cam){
+				case 'ori': to_cam="rot"; break;
+				case 'rot': to_cam="inv"; break;
+				case 'inv': to_cam="rev"; break;
+				case 'rev': to_cam="ori"; break;		
+			}break;
+		case "rotateCCW":
+			switch(cam){
+				case 'ori': to_cam='rev'; break;
+				case 'rev': to_cam='inv'; break;
+				case 'inv': to_cam='rot'; break;
+				case 'rot': to_cam='ori'; break;
+			}break;
+		default: break;
+	}
+	return to_cam;
+}
+function flipFace(face,t){
+	var newFace;
+	switch(t){
+		case "rotateCW": 	face>=6 ? face-=6 : face+=2; break;
+		case "rotateCCW":  	face<=1 ? face +=6 : face-=2; break;
+	}
+	return face;
+}
+
 function rotateFloorAction(f,wo,position,c_d){
 	var to_cam, face=Player.face;
-	switch(wo){
+	/*switch(wo){
 		case "rotateCW":
 			switch(c_d){
 				case 'ori': to_cam="rot"; break;
@@ -324,11 +329,13 @@ function rotateFloorAction(f,wo,position,c_d){
 			}face<=1 ? face+=6 : face-=2;
 			break;
 		default: break;
-	}
-	Player.cam=to_cam;
+	}*/
+	Player.cam=flipCamera(c_d,wo);
 	$('#piso'+f+' *').remove();
-	flipFloors(f,to_cam);
-	flipPlayer(f,Player,to_cam,face);
+	flipFloors(f,Player.cam);
+	flipPlayer(f,Player.coord,Player.cam, flipFace(Player.face,wo));
+	clearWalls(20,"hide");
+	analizeWalls(20);
 }
 function flipFloors(f,cam){
 	if(f>0){
@@ -340,8 +347,8 @@ function flipFloors(f,cam){
 	startFloor(f,cam);
 	flipClass(rotateLevel(eval('floor_'+f),cam),f,cam);
 }
-function flipPlayer(f,play,cam,face){
-	var	newPos=rotatePlayerPos(cam,{y:play.coord.y, x:play.coord.x},eval('floor_'+f).length),
+function flipPlayer(f,pos,cam,face){
+	var	newPos=rotatePlayerPos(cam,{y:pos.y, x:pos.x},eval('floor_'+f).length),
 		farbe=getColor(rotateLevel(eval('floor_'+f),cam)[newPos.y][newPos.x]);
 	Player.face=face;
 	startPlayer(f,newPos,farbe);
@@ -364,3 +371,34 @@ function flipClass(arr,f,typ){
 		}
 	}
 }
+
+
+
+
+
+function playerAttr(y,x,face,cam,floor){
+	this.face=face;
+	this.cam=cam;
+	this.floor=floor;
+	this.coord={y,x};
+}
+var Player=new playerAttr(11,7,1,'rev',2);
+
+$(document).ready(function(){
+	assignStyles();
+	for(var r=0, u=pisos.length;r<=pisos.length, u>=0;r++, u--){
+		$('body').append('<div class="floor" id="piso'+r+'"/>');
+		$('#piso'+r).css({
+			top: u*225+"px"
+		});
+		
+	}
+	$('body').append('<div id="selection"/>');
+	for(var kok=0; kok<Player.floor; kok++){
+		startFloor(kok,Player.cam);
+	}
+	startFloor(Player.floor,Player.cam);
+	flipPlayer(Player.floor,Player.coord,Player.cam,4);
+	//startPlayer(Player.floor,Player.coord,getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]));
+	rotateFloorButton();
+});

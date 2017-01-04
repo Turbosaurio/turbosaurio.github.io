@@ -5,8 +5,10 @@
 		<title>Test level 01</title>
 		<!-- <link rel="stylesheet" type="text/css" href="css/floor.css"/> -->
 		<!-- <link rel="stylesheet" type="text/css" href="css/textures.css"/> -->
-		<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<meta name="viewport" content="initial-scale=1.0,maximum-scale=0.5"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"/>
+
 		<!-- <script src="js/jquery.js"/> -->
 		<script src="js/levels_new.js"/>
 		<script src="js/a_star_lib.js"/>
@@ -25,7 +27,7 @@
 			}
 			.floor{
 				position:absolute;
-				left: 1450px;
+				left: 1450px;			
 			}
 			.tileSelec{
 				position:absolute;
@@ -97,6 +99,13 @@
 				text-align: center;
 				font-weight: bold;
 				font-size: 2em;
+				cursor: pointer;
+			}
+			.a_btn{
+				position: absolute;
+				width: 65px;
+				height: 65px;
+				background-color: green;
 				cursor: pointer;
 			}
 		</style>

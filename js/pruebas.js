@@ -1,7 +1,7 @@
 'use strict'
 function createPlayerBubble(com){
 	var 	a=[1,4,5,4,1,-2,-3,-2],
-			b=[5,4,1,-2,-3,-2,1,4],
+		b=[5,4,1,-2,-3,-2,1,4],
 			distance=300;
 	$('#bubble').append('<div id="b_m"/>');
 	$('#b_m').css({
