@@ -108,7 +108,7 @@ function processToMove(route,floor,newPos){
 
 	var lal=getDepths(route,floor);
 	
-	$('#jugador01').css({'z-index': dep});	
+	$('#jugador01').css({'z-index': lal[ptm]});	
 	$('#jugador01').animate({
 		top: mik.y+px,
 		left: mik.x+px,
@@ -195,7 +195,7 @@ function analizeWalls(lim){
 		var action=eval('floor_'+Player.floor)[a[h].y][a[h].x];
 		if(findAction(action)!=undefined){
 			//console.log(a.length);
-			b.push(findAction(action));
+			b.push([findAction(action),{y: a[h].y, x:a[h].x }]);
 		}
 	}
 	//console.log(b);
@@ -206,14 +206,14 @@ function createActionButtons(arr){
 	var action;
 	//console.log(arr.length);
 	for(var g=0;g<arr.length;g++){
-		if(arr[g]>=61 && arr[g]<=68){////////////enter
+		if(arr[g][0]>=61 && arr[g][0]<=68){////////////enter
 			action="enter";
 		}
-		if(arr[g]>=81 && arr[g]<=124 || arr[g]>=260 && arr[g]<=305){////////////up yellow
+		if(arr[g][0]>=81 && arr[g][0]<=124 || arr[g][0]>=260 && arr[g][0]<=305){////////////up yellow
 			action="one_up";
 		}
 		//console.log(action);
-		$('body').append('<div id="p_btn'+g+'" p_a="'+action+'" class="a_btn"/>');
+		$('body').append('<div id="p_btn'+g+'" p_a="'+action+'" class="a_btn" y="'+arr[g][1].y+'" x="'+arr[g][1].x+'"/>');
 		var play=$('#jugador01').offset();
 		$('#p_btn'+g).css({
 			top: play.top+"px",
@@ -226,12 +226,18 @@ function createActionButtons(arr){
 		console.log(g);
 		switch(g){
 			case "one_up":
-				console.log('up');
+				var p=eval('floor_'+Player.floor)[parseInt($(this).attr('y'))][parseInt($(this).attr('x'))];
+				if(p==264 || p==304){
+					Player.coord.x-=6;
+					Player.face=3;
+				}
+				
 				$('#jugador01, .a_btn').remove();
 				clearWalls(20,"show");
 				Player.floor+=1;
-				startFloor(Player.floor,Player.cam)
+				startFloor(Player.floor,Player.cam);
 				startPlayer(Player.floor,Player.coord,getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]));
+				flipPlayer(Player.floor, Player.coord, Player.cam, Player.face);
 				break;
 			default: break;
 		}
@@ -256,28 +262,25 @@ function clearWalls(lim,mode){
 				case "show":
 					texture=lvl+level;
 					break;
-			}	
+			}
+			console.log	(lvl);
+			console.log(wallValue(farbe,lvl));
 			tile.attr('class','txt'+Math.abs(texture)); 
 		}
 	}
-}
-function getRanges(color){
-	var rangos=[13,24,25,36,61,68,81,120];
-	return rangos;
+	console.log('//////////////////')
 }
 function wallValue(farbe,val){
-	var p=0, lol=getRanges(), e;
-	switch(farbe){
-		case "yellow": e=0; break;
-		case "red": e=180; break;
-		case "blue": e=360; break;
-		default: break;
-	}
-	/*if(val>(lol[0]+e) && val<(lol[1]+e)) p=24;
-	if(val>(lol[2]+e) && val<(lol[3]+e)) p=8;
-	if(val>(lol[4]+e) && val<(lol[5]+e)) p=20;*/
-
-	if(val>=lol[0]+e && val<=lol[1]+e){
+	var p=0, lol=getRanges(), e=getColorStart(farbe);
+	
+	if(val>=lol[0]+e && val<=lol[1]+e) p=24;
+	if(val>=lol[2]+e && val<=lol[3]+e) p=24;
+	if(val>=lol[4]+e && val<=lol[5]+e) p=8;
+	if(val>=lol[6]+e && val<=lol[7]+e) p=20;
+	
+	return val+p;
+	//if(val>=13 && val<=24) p=24;
+	/*if(val>=lol[0]+e && val<=lol[1]+e){
 		 if(val%4==0 || val%4==3){
 			p=24;
 		 }
@@ -297,27 +300,34 @@ function wallValue(farbe,val){
 		if(val%4==0 || val%4==3){
 			p=20;
 		}
-	}
+	}*/
 	
 
-	return val+p;
-	/*if(farbe=="yellow"){
-		if(val%4!=1){
-			if(val>2 && val<37) p=24;
-			if(val>60 && val<69) p=8;
-			if(val>80 && val<121) p=20;
-		}
+	
+}
+function getRanges(color){
+	var rangos=[13,24,25,36,61,68,81,120];
+	return rangos;
+}
+function getColorStart(farbe){
+	switch(farbe){
+		case 'yellow': return 0; break;
+		case 'red': return 180; break;
+		case 'blue': return 360; break;
+		default: return false; break;
 	}
-////////////rest of color ranges here 
-	if(farbe=="red"){
-		if(val%4!=1){
-			if(val>182 && val<217) p=24;
-			if(val>240 && val<249) p=8;
-			if(val>261 && val<301) p=20;
-		}
+}
+function rotableWalls(farbe,val){
+	var e=getColorStart(farbe);
+	var a=getRanges();
+	if(	val>=(a[0]+e) && val<=(a[1]+e) ||
+		val>=(a[2]+e) && val<=(a[3]+e) ||
+		val>=(a[4]+e) && val<=(a[5]+e) ||
+		val>=(a[6]+e) && val<=(a[7]+e)	){
+		return true;
+	}else{
+		return false;
 	}
-////////////////////////////////////////////////
-	return val+p;*/
 }
 function flipTileWall(cam,value){
 	var p=0;
@@ -344,21 +354,6 @@ function flipTileWall(cam,value){
 	return parseInt(p);
 }
 
-function rotableWalls(farbe,val){
-	var e;
-	switch(farbe){
-		case 'yellow': e=0; break;
-		case 'red': e=180; break;
-		case 'blue': e=360; break;
-		default: return false; break;
-	}
-	var a=getRanges();
-	if(val>(a[0]+e+10) && val<(a[1]+e) || val>(a[2]+e) && val<(a[3]+e) || val>(a[4]+e) && val<(a[5]+e)){
-		return true;
-	}else{
-		return false;
-	}
-}
 
 function actionValidate(val){
 	var actions=[

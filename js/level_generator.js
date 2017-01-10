@@ -353,6 +353,7 @@ function flipPlayer(f,pos,cam,face){
 	Player.face=face;
 	startPlayer(f,newPos,farbe);
 }
+
 function update_player(p,attr){
 	p=new playerAttr(attr.y,attr.x,attr.face,"jugador01",attr.floor);
 }
@@ -361,7 +362,7 @@ function flipClass(arr,f,typ){
 		for(var i=0;i<arr[0].length; i++){
 			var t=arr[g][i];
 			if(
-			t>4 && t<181 || t>185 && t<353 || t>360 && t<425 || 
+			t>4 && t<181 || t>185 && t<353 || t>360 && t<461 || 
 			t>540 && t<581 || t>640 && t<717 ||
 			t>724 && t<797 || t>824 && t<885
 			){////yellow
@@ -382,7 +383,35 @@ function playerAttr(y,x,face,cam,floor){
 	this.floor=floor;
 	this.coord={y,x};
 }
-var Player=new playerAttr(11,7,1,'rev',2);
+//var Player=new playerAttr(12,7,1,'ori',3);
+function getPlayerVars(){
+	var	_url=window.location.href,
+		f=_url.search('f='),
+		y=_url.search('py='),
+		x=_url.search('px='),
+		c=_url.search('pc='),
+		pf=_url.search('pf='),
+		floor=_url.substring(f+2,y-1),
+		py=_url.substring(y+3,x-1),
+		px=_url.substring(x+3,c-1),
+		pc=_url.substring(c+3,pf-1),
+		pf=_url.substring(pf+3,_url.length);
+
+	return{
+		floor: parseInt(floor),
+		y: parseInt(py),
+		x: parseInt(px),
+		cam: pc,
+		face: parseInt(pf)
+	}
+}
+var Player=new playerAttr(
+	getPlayerVars().y,
+	getPlayerVars().x,
+	getPlayerVars().face,
+	getPlayerVars().cam,
+	getPlayerVars().floor
+	);
 
 $(document).ready(function(){
 	assignStyles();
@@ -398,7 +427,7 @@ $(document).ready(function(){
 		startFloor(kok,Player.cam);
 	}
 	startFloor(Player.floor,Player.cam);
-	flipPlayer(Player.floor,Player.coord,Player.cam,4);
+	flipPlayer(Player.floor,Player.coord,Player.cam,Player.face);
 	//startPlayer(Player.floor,Player.coord,getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]));
 	rotateFloorButton();
 });
