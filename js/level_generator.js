@@ -107,13 +107,11 @@ function createLevel(arr,tar,height,width,tileName,f,typ){
 	flipClass(kek,f,typ);
 	pisos[f]="open";
 }
-function enterInstance(color){
-	
-}
+
 function instanceColor(val,color){
 	switch(color){
 		case 'yellow': 
-			if(val==2 || val>4 && val<180){
+			if(val==2 || val>4 && val<81){
 				return true;
 			}break; 
 		case 'red': 	
@@ -139,9 +137,15 @@ function instanceColor(val,color){
 		default: break;
 	}
 }
-function getColor(val){
-	if(val==2 || val>4 && val<180) return 'yellow';
-	if(val==182 || val>184 && val<261) return 'red';
+function getColor(val,s){
+	var e;
+	if(s=="stairs"){
+		e=100;
+	}else{
+		e=0;
+	}
+	if(val==2 || val>4 && val<80+e) return 'yellow';
+	if(val==182 || val>184 && val<261+e) return 'red';
 	if(val==445 || val==446) return 'green';
 	if(val==290 || val>199 && val<361) return 'blue';
 	if(val>540 && val<581 || val==601 || val==602) return 'street';
@@ -169,7 +173,7 @@ function createSelectors(f,leng,color){
 };
 
 
-function focusWalls(f,t){
+/*function focusWalls(f,t){
 	var arr=eval('floor_'+f);
 	for(var a=0; a<arr.length; a++){
 		for( var b=0; b<arr[a].length; b++){
@@ -188,8 +192,8 @@ function focusWalls(f,t){
 			}
 		}
 	}
-}
-function hideCurrentWall(floor,coord,mode){
+}*/
+/*function hideCurrentWall(floor,coord,mode){
 	switch(mode){
 		case 'all':
 			for(var h=0;h<8;h++){
@@ -236,11 +240,11 @@ function hideCurrentWall(floor,coord,mode){
 			break;
 		default: break;
 	}
-}
-function restoreWall(floor,coord){
+}*/
+/*function restoreWall(floor,coord){
 	$('#tile'+floor+"_"+coord.y+"_"+coord.x).attr('class','txt'+$('#tile'+floor+"_"+coord.y+"_"+coord.x).attr('level'));
 	//$('#tile'+floor+"_"+coord.y+"_"+coord.x).css({opacity:1});
-}
+}*/
 function hideFloor(f){
 	$('#piso'+f).hide();
 }
@@ -256,10 +260,6 @@ function startFloor(f,typ){
 	var arr=eval('floor_'+f);
 	$('#piso'+f+' *').remove();
 	createLevel(arr,'piso'+f,t_w,t_h,'tile',f,typ);
-	/*$('html, body').animate({
-		scrollTop: $('#jugador01').offset().top-200,
-		scrollLeft: $('#jugador01').offset().left-300
-	},animPlayTime);*/
 };
 
 function startPlayer(f,pos,color){
@@ -383,10 +383,11 @@ function playerAttr(y,x,face,cam,floor){
 	this.floor=floor;
 	this.coord={y,x};
 }
-//var Player=new playerAttr(12,7,1,'ori',3);
+var Player=new playerAttr(7,10,1,'ori',2);
 function getPlayerVars(){
 	var	_url=window.location.href,
 		f=_url.search('f='),
+
 		y=_url.search('py='),
 		x=_url.search('px='),
 		c=_url.search('pc='),
@@ -405,16 +406,24 @@ function getPlayerVars(){
 		face: parseInt(pf)
 	}
 }
-var Player=new playerAttr(
+/*function getUrlVars(){
+	var	vars={},
+		parts=window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(m,ke,value){
+			vars[key]=value;
+		});
+	return vars;
+}*/
+/*var Player=new playerAttr(
 	getPlayerVars().y,
 	getPlayerVars().x,
 	getPlayerVars().face,
 	getPlayerVars().cam,
 	getPlayerVars().floor
-	);
+	);*/
 
 $(document).ready(function(){
 	assignStyles();
+	
 	for(var r=0, u=pisos.length;r<=pisos.length, u>=0;r++, u--){
 		$('body').append('<div class="floor" id="piso'+r+'"/>');
 		$('#piso'+r).css({

@@ -56,20 +56,11 @@ var animatePlayer, animPlayTime=250;
 var ptm=0;
 
 function playerFace(val,type){
-	/*
-	S 0
-	SW 1
-	W 2
-	NW 3
-	N 4 
-	NE 5
-	E 6
-	SE 7
-	*/
+	/*S0   SW1   W2   NW3   N4   NE5   E6   SE7*/
 	var	px="px",
 		y=[1,3,2,0,1,0,2,3],
-		x_a=[3,2,2,2,2,3,3,3], //////walking
-		x_b=[4,1,1,1,1,4,4,4], //////walking
+		x_a=[3,2,2,2,2,3,3,3], //////walking left foot
+		x_b=[4,1,1,1,1,4,4,4], //////walking right foot
 		x_c=[5,0,0,0,0,5,5,5], //////standing
 		x=eval('x_'+type)[val];
 	$('#jugador01').css({"background-position" : x*-150+px+" "+y[val]*-300+px});
@@ -213,7 +204,7 @@ function createActionButtons(arr){
 			action="one_up";
 		}
 		//console.log(action);
-		$('body').append('<div id="p_btn'+g+'" p_a="'+action+'" class="a_btn" y="'+arr[g][1].y+'" x="'+arr[g][1].x+'"/>');
+		$('body').append('<div id="p_btn'+g+'" p_a="'+action+'" class="a_btn" y="'+arr[g][1].y+'" x="'+arr[g][1].x+'">'+action+'</div>');
 		var play=$('#jugador01').offset();
 		$('#p_btn'+g).css({
 			top: play.top+"px",
@@ -227,11 +218,11 @@ function createActionButtons(arr){
 		switch(g){
 			case "one_up":
 				var p=eval('floor_'+Player.floor)[parseInt($(this).attr('y'))][parseInt($(this).attr('x'))];
-				if(p==264 || p==304){
-					Player.coord.x-=6;
-					Player.face=3;
-				}
-				
+				console.log(playerStairsDisplace(p));
+				Player.coord.y=parseInt($(this).attr('y'))+playerStairsDisplace(p).y;
+				Player.coord.x=parseInt($(this).attr('x'))+playerStairsDisplace(p).x;
+				Player.face=playerStairsDisplace(p).f;
+
 				$('#jugador01, .a_btn').remove();
 				clearWalls(20,"show");
 				Player.floor+=1;
@@ -243,6 +234,43 @@ function createActionButtons(arr){
 		}
 	});
 }
+function playerStairsDisplace(val){
+	var e,y,x,f;
+	//console.log(getColor(val,1));
+	switch(getColor(val,"stairs")){
+		case 'yellow':
+			e=0; 
+			break;
+		case 'red':
+			e=180;
+			break;
+		default: break;
+	}
+	/*S0   SW1   W2   NW3   N4   NE5   E6   SE7*/
+	if(val==81+e || val==103+e || val==121+e)	y=-5,	x=0, f=5;
+	if(val==82+e || val==104+e || val==122+e)	y=0,	x=5, f=7;
+	if(val==83+e || val==101+e || val==123+e)	y=5,	x=0, f=1;
+	if(val==84+e || val==102+e || val==124+e)	y=0,	x=-5, f=3;
+	return {y,x,f};
+};
+
+/*function durchTur(val){
+	var	curr_posi=eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x],
+		curr_farb=getColor(curr_posi),
+		new_farb=getColor(val),
+		new_posi, e, farb;
+	if(curr_farb==new_farb) farbe=curr_farb;
+	if(curr_farb!=new_farb) farbe=new_farb;
+	switch(farbe){
+		case "yellow": e=0; break;
+		case "red": e=180; break;
+	}
+	if(val==61+e || val==65+e) e="x" 
+	if(val==62+e || val==66+e) 
+	if(val==63+e || val==67+e) 
+	if(val==64+e || val==68+e) 
+}*/
+
 function clearWalls(lim,mode){
 	var	a=getNeighTiles(Player.floor,Player.coord,lim),
 		farbe=getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]);
@@ -263,12 +291,12 @@ function clearWalls(lim,mode){
 					texture=lvl+level;
 					break;
 			}
-			console.log	(lvl);
-			console.log(wallValue(farbe,lvl));
+			//console.log	(lvl);
+			//console.log(wallValue(farbe,lvl));
 			tile.attr('class','txt'+Math.abs(texture)); 
 		}
 	}
-	console.log('//////////////////')
+	//console.log('//////////////////')
 }
 function wallValue(farbe,val){
 	var p=0, lol=getRanges(), e=getColorStart(farbe);
@@ -279,31 +307,6 @@ function wallValue(farbe,val){
 	if(val>=lol[6]+e && val<=lol[7]+e) p=20;
 	
 	return val+p;
-	//if(val>=13 && val<=24) p=24;
-	/*if(val>=lol[0]+e && val<=lol[1]+e){
-		 if(val%4==0 || val%4==3){
-			p=24;
-		 }
-	}
-	if(val>=lol[2]+e && val<=lol[3]+e){
-		if(val%4==0 || val%4==3 || val%4==2){
-			p=24;
-		}
-
-	}
-	if(val>=lol[4]+e && val<=lol[5]+e){
-		if(val%4==0 || val%4==3){
-			p=8;
-		}
-	}
-	if(val>=lol[6]+e && val<=lol[7]+e){
-		if(val%4==0 || val%4==3){
-			p=20;
-		}
-	}*/
-	
-
-	
 }
 function getRanges(color){
 	var rangos=[13,24,25,36,61,68,81,120];
@@ -355,7 +358,7 @@ function flipTileWall(cam,value){
 }
 
 
-function actionValidate(val){
+/*function actionValidate(val){
 	var actions=[
 		61,82, ////sube yellow
 		241,269,////sube red
@@ -416,8 +419,8 @@ function mapButtons(f,pos){
 			}
 		}
 	}
-}
-function createMapButton(o,c,f){
+}*/
+/*function createMapButton(o,c,f){
 	var	color, name=c.f+"_"+c.y+"_"+c.x,
 		a,b;
 	if(o.id=="a" && o.t=="u") a=0, b=0;
@@ -497,8 +500,8 @@ function createMapButton(o,c,f){
 			case "d": 
 				hideFloor(c.f);
 				o.id=="a" ? v=6 : s=6;
-				/*posA.y=parseInt($(this).attr('y'))+v;
-				posA.x=parseInt($(this).attr('x'))+s;*/
+				posA.y=parseInt($(this).attr('y'))+v;
+				posA.x=parseInt($(this).attr('x'))+s;
 				posA.y+=s;
 				posA.x+=v;
 				startFloor(c.f-1,current_dir);
@@ -553,10 +556,10 @@ function openPanel(f,tot){
 	for(var g=0;g<tot;g++){
 		$('#userPanel').append('<div class="panelButton" level="'+(g+1)+'">'+(g+1)+'</div>');
 	}
-	/*$('#userPanel').css({
+	$('#userPanel').css({
 		top: $('#jugador01').offset().top+"px",
 		left: $('#jugador01').offset().left+"px"
-	});*/
+	});
 	$('.panelButton').bind('click',function(){
 		console.log(f);
 		var level=parseInt($(this).attr('level'));
@@ -569,4 +572,4 @@ function openPanel(f,tot){
 		startFloor(level, 'yellow');
 		$('#userPanel').remove();
 	});
-}
+}*/
