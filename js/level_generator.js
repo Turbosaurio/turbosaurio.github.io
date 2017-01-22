@@ -423,7 +423,6 @@ function getPlayerVars(){
 
 $(document).ready(function(){
 	assignStyles();
-	
 	for(var r=0, u=pisos.length;r<=pisos.length, u>=0;r++, u--){
 		$('body').append('<div class="floor" id="piso'+r+'"/>');
 		$('#piso'+r).css({
