@@ -19,6 +19,9 @@ img{
 	font-weight: bold;
 	text-decoration: underline;
 }
+#content{
+	font-family: 'Montserrat', sans-serif;
+}
 #content h1{
 	color: #C2B59B;
 	letter-spacing: -.5px;
@@ -26,6 +29,7 @@ img{
 #content .quote{
 	font-style: italic;
 	text-align: right;
+	font-family: 'Vollkorn', serif;
 	color: #b2b2b2;
 }
 #content .emph{
@@ -49,22 +53,43 @@ img{
 .eng{
 	color:#C2B59B;
 	text-align: right;
-	font-family: eng_font, serif;
+	font-family: 'Vollkorn', serif;
+	font-style: italic;
 }
-#content h1::before{
+/*#content h1::before{
 	content:url('../imgs/title_dec.png'); 
 	margin-right: 5px;
-}
+}*/
 
 
 h1{
 	font-family: title_font;
 }
-@font-face{
-	font-family:title_font;
-	src: url('../fonts/ArnoPro-SmbdDisplay.otf') format('opentype');
+
+.sample, #close{
+	cursor: pointer;
 }
-@font-face{
-	font-family:eng_font;
-	src: url('../fonts/ArnoPro-Display.otf') format('opentype');
+
+#screen{
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: rgba(20,20,20,.9);
+	height: 100vh;
+	width: 100vw;
+	z-index: 1000;
+}
+#close{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 70px;
+	height: 70px;
+}
+#screenImg{
+	display: block;
+	width: 50%;
+	height: auto;
+	margin: 0 auto;
 }

@@ -18,6 +18,18 @@
 			body{
 				background: rgb(25,25,25);
 			}
+			#background_1{
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 100vh;
+				width: 100vw;
+				background-image: url('img/background.jpg');
+				background-size: 120vh auto;
+				background-repeat: repeat-x;
+				background-color: #424c3c;
+				z-index: -1500;
+			}
 			tile{
 				position: absolute;
 				color: white;
@@ -111,6 +123,7 @@
 		</style>
 	</head>
 	<body>
+		<div id="background_1"/>
 		<div id="buttons">
 			<div class="button_dev" id="rotateCW">CW &#8635;</div>
 			<div class="button_dev" id="rotateCCW">CCW &#8634;</div>

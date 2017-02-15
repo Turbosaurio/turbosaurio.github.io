@@ -26,7 +26,7 @@ function smallMenu(){
 	$('#cinta').css({"top":($('#content').offset(top))+"px"});
 };
 function addElements(){
-	$('body').append('<img id="firma" src="imgs/ts.png" alt="firma"/><img id="cinta" src="imgs/cinta.png"/>')
+	$('body').append('<img id="cinta" src="imgs/cinta.png"/>')
 };
 
 function readAdressBar(){
@@ -54,8 +54,24 @@ function buttonTop(){
 		$('#top').hide();
 	});
 }
+function thumbnailClick(){
+	$('.sample').click(function(){
+		var src=$(this).attr('src');
+		console.log(src);
+		$('#screen').show();
+		$('#screenImg').attr('src',src);
+	});
+}
+function closeGallery(){
+	$('.close').click(function(){
+		console.log('caca');
+		$('#screen').hide();
+	})
+}
 $(document).ready(function(){
 	addElements();
+	thumbnailClick();
+	closeGallery();
 	for(var t=1; t<=5; t++){
 		pressMenu(t);
 	};

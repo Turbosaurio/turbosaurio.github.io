@@ -383,7 +383,7 @@ function playerAttr(y,x,face,cam,floor){
 	this.floor=floor;
 	this.coord={y,x};
 }
-var Player=new playerAttr(12,10,1,'ori',2);
+var Player=new playerAttr(12,10,1,'ori',3);
 function getPlayerVars(){
 	var	_url=window.location.href,
 		f=_url.search('f='),
@@ -422,6 +422,7 @@ function getPlayerVars(){
 	);*/
 
 $(document).ready(function(){
+	scrollBackground('#background_1',.06,.5);
 	assignStyles();
 	for(var r=0, u=pisos.length;r<=pisos.length, u>=0;r++, u--){
 		$('body').append('<div class="floor" id="piso'+r+'"/>');

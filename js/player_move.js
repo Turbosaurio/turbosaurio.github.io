@@ -573,3 +573,13 @@ function openPanel(f,tot){
 		$('#userPanel').remove();
 	});
 }*/
+
+function scrollBackground(target,x,y){
+	$(window).bind('scroll',function(){
+		var	n_y=$(window).scrollTop(),
+			n_x=$(window).scrollLeft();
+		$(target).css({
+			'background-position': (n_x*-x)+"px "+(n_y*-y)+"px"
+		});
+	});
+ }
