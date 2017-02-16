@@ -63,7 +63,7 @@ function thumbnailClick(){
 	});
 }
 function closeGallery(){
-	$('.close').click(function(){
+	$('.close, #screen').click(function(){
 		console.log('caca');
 		$('#screen').hide();
 	})

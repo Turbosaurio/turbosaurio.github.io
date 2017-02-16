@@ -25,6 +25,9 @@ img{
 #content h1{
 	color: #C2B59B;
 	letter-spacing: -.5px;
+	font-family: 'Vollkorn', serif;
+	border-bottom: 2px solid #C2B59B;
+	margin-bottom: 0px;
 }
 #content .quote{
 	font-style: italic;
@@ -60,11 +63,6 @@ img{
 	content:url('../imgs/title_dec.png'); 
 	margin-right: 5px;
 }*/
-
-
-h1{
-	font-family: title_font;
-}
 
 .sample, #close{
 	cursor: pointer;
