@@ -423,6 +423,7 @@ function getPlayerVars(){
 
 $(document).ready(function(){
 	scrollBackground('#background_1',.06,.5);
+	console.log('caca');
 	assignStyles();
 	for(var r=0, u=pisos.length;r<=pisos.length, u>=0;r++, u--){
 		$('body').append('<div class="floor" id="piso'+r+'"/>');
@@ -439,4 +440,5 @@ $(document).ready(function(){
 	flipPlayer(Player.floor,Player.coord,Player.cam,Player.face);
 	//startPlayer(Player.floor,Player.coord,getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]));
 	rotateFloorButton();
+	console.log('caca');
 });

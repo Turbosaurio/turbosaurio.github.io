@@ -1,6 +1,6 @@
 'use strict'
 function neighNodes(ind){
-	var x,y,a;
+	var x,y;
 	switch(ind){
 		case 0: 	x=-1;		y=-1;		break;//NW
 		case 1: 	x=0;		y=-1;		break;//N
@@ -12,17 +12,17 @@ function neighNodes(ind){
 		case 7: 	x=-1;		y=0;		break;//W
 		default:	break;
 	}
-	return{x,y,a};
+	return{x,y};
 };
 function findN(mapArr,initialNode){
 	var 	y=[], x=[];
 	for(var g=7;g>=0;g--){
 		var	one=neighNodes(g).y+initialNode.y;
 		var	two=neighNodes(g).x+initialNode.x;
-		if(one>=0 && one<mapArr.length && two>=0 && two<mapArr.length){
+		if(one>=0 && one<mapArr.length && two>=0 && two<mapArr.length){///////////existing boundaries
 			if(star_nodes[initialNode.y][two]!="u" && star_nodes[one][initialNode.x]!="u"){////dont cross corners
 				if(star_nodes[one][two]=="i" || star_nodes[one][two]=="o"){
-					y.push(one);///////////existing boundaries
+					y.push(one);
 					x.push(two);
 				}
 			}
@@ -30,7 +30,8 @@ function findN(mapArr,initialNode){
 	};
 	return {y,x};
 };
-function getMinIndex(obj){	
+function getMinIndex(obj){
+	////get minimum index of array
 	var	t=[], q=[], s=[], i;
 	for(i=0;i<obj.length;i++){
 		t.push(obj[i].f);
@@ -48,14 +49,15 @@ function getMinIndex(obj){
 };
 
 function getHipo(c1,c2,typ){
+	
 	var	k,
 		cat1=Math.abs(c1.y-c2.y),
 		cat2=Math.abs(c1.x-c2.x);
 	switch(typ){
-		case "t":
+		case "t": ////Taaales Taaales de Mileto
 			k=Math.floor(Math.sqrt(Math.pow(cat1,2)+Math.pow(cat2,2))*10);
 			break;
-		case "h":
+		case "h": ////Heurisique
 			k=cat1+cat2*10;
 			break;
 		default: break;
