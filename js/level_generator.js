@@ -440,5 +440,4 @@ $(document).ready(function(){
 	flipPlayer(Player.floor,Player.coord,Player.cam,Player.face);
 	//startPlayer(Player.floor,Player.coord,getColor(eval('floor_'+Player.floor)[Player.coord.y][Player.coord.x]));
 	rotateFloorButton();
-	console.log('caca');
 });
