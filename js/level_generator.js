@@ -95,7 +95,7 @@ function createLevel(arr,tar,height,width,tileName,f,typ){
 				tile=kek[y][x],
 				clas="txt"+(parseInt(tile)+flipTileWall(typ,tile));
 			//$('#'+tar).append('<tile id="'+tileName+f+"_"+y+"_"+x+'" class="'+clase+(parseInt(tile)+flipTileWall(typ,kek[y][x]))+'" level="'+tile+'" fpos="'+1+'" ypos="'+y+'" xpos="'+x+'"></tile>');			
-			$('#'+tar).append('<tile id="'+tileName+f+"_"+y+"_"+x+'" class="'+"txt"+tile+'" level="'+tile+'" fpos="'+1+'" ypos="'+y+'" xpos="'+x+'">tile</tile>');			
+			$('#'+tar).append('<tile id="'+tileName+f+"_"+y+"_"+x+'" class="'+"txt"+tile+'" level="'+tile+'" fpos="'+1+'" ypos="'+y+'" xpos="'+x+'">clas</tile>');			
 			$('#'+tileName+f+"_"+y+"_"+x).css({
 				top: h*height+"px",	
 				left: kok[xpos]+"px",
