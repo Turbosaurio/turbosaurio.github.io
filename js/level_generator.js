@@ -383,7 +383,7 @@ function playerAttr(y,x,face,cam,floor){
 	this.floor=floor;
 	this.coord={y,x};
 }
-var Player=new playerAttr(12,10,1,'ori',2);
+var Player=new playerAttr(12,10,1,'ori',0);
 function getPlayerVars(){
 	var	_url=window.location.href,
 		f=_url.search('f='),
